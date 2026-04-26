@@ -11,7 +11,7 @@ export async function setLanguage(language) {
   currentLanguage = SUPPORTED_LANGUAGES.includes(language) ? language : 'en';
   localStorage.setItem(STORAGE_KEY, currentLanguage);
   document.documentElement.lang = currentLanguage;
-  const response = await fetch(`/i18n/${currentLanguage}.json`);
+  const response = await fetch(`${import.meta.env.BASE_URL}i18n/${currentLanguage}.json`);
   translations = await response.json();
   applyTranslations();
   window.dispatchEvent(new CustomEvent('freshkargo:language-changed', { detail: { language: currentLanguage } }));

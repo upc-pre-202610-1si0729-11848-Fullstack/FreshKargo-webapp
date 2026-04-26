@@ -51,10 +51,10 @@ export const landingStore = {
     ])
   ],
   teamMembers: [
-    createTeamMember('Josué Carpio', '', '/src/assets/images/Josue.png'),
-    createTeamMember('Jennifer Riveros', '', '/src/assets/images/Jennifer.jpeg'),
-    createTeamMember('Felix', '', '/src/assets/images/Felix.jpeg'),
-    createTeamMember('Rodrigo', '', '/src/assets/images/Rodrigo.jpeg'),
-    createTeamMember('Andree', '', '/src/assets/images/Andree.jpeg')
+    createTeamMember('Josué Carpio', '', 'src/assets/images/Josue.png'),
+    createTeamMember('Jennifer Riveros', '', 'src/assets/images/Jennifer.jpeg'),
+    createTeamMember('Felix', '', 'src/assets/images/Felix.jpeg'),
+    createTeamMember('Rodrigo', '', 'src/assets/images/Rodrigo.jpeg'),
+    createTeamMember('Andree', '', 'src/assets/images/Andree.jpeg')
   ]
 };
