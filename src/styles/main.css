@@ -1,0 +1,78 @@
+@import url('./tokens.css');
+@import url('../app/shared/presentation/components/header/header.css');
+@import url('../app/shared/presentation/components/language-switcher/language-switcher.css');
+@import url('../app/shared/presentation/components/footer/footer.css');
+@import url('../app/landing/presentation/pages/landing-page/landing-page.css');
+@import url('../app/landing/presentation/sections/hero/hero.css');
+@import url('../app/landing/presentation/sections/services/services.css');
+@import url('../app/landing/presentation/sections/how-it-works/how-it-works.css');
+@import url('../app/landing/presentation/sections/pricing/pricing.css');
+@import url('../app/landing/presentation/sections/team/team.css');
+@import url('../app/landing/presentation/sections/contact/contact.css');
+@import url('../app/landing/presentation/sections/final-cta/final-cta.css');
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  color: var(--color-ink);
+  background: #fff;
+  font-family: var(--font-main);
+}
+a { color: inherit; text-decoration: none; }
+button, input { font: inherit; }
+img { max-width: 100%; display: block; }
+.section-container {
+  width: min(var(--container), calc(100% - 40px));
+  margin: 0 auto;
+}
+.section-title {
+  margin: 0;
+  font-size: clamp(2rem, 3vw, 3rem);
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+  color: var(--color-ink);
+}
+.section-subtitle {
+  margin: 12px auto 0;
+  max-width: 700px;
+  color: var(--color-muted);
+  font-size: 1rem;
+  line-height: 1.6;
+  text-align: center;
+}
+.section-heading {
+  text-align: center;
+  margin-bottom: 44px;
+}
+.primary-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  padding: 0 24px;
+  border-radius: 8px;
+  border: 0;
+  background: var(--color-primary);
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 10px 24px rgba(60, 78, 184, 0.25);
+  transition: transform 0.18s ease, background 0.18s ease;
+}
+.primary-button:hover { transform: translateY(-2px); background: var(--color-primary-dark); }
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 16px;
+  background: #fff;
+  color: var(--color-primary);
+  padding: 8px 12px;
+  border-radius: 8px;
+  z-index: 999;
+}
+.skip-link:focus { top: 16px; }
+@media (max-width: 760px) {
+  .section-container { width: min(100% - 28px, var(--container)); }
+  .section-heading { margin-bottom: 30px; }
+}

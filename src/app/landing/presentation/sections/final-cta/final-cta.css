@@ -1,0 +1,30 @@
+.final-cta-section {
+  padding: 84px 0;
+  background: var(--color-primary);
+  color: #fff;
+  text-align: center;
+}
+.final-cta-content { max-width: 760px; }
+.cta-icon { font-size: 3rem; margin-bottom: 18px; }
+.final-cta-section h2 {
+  margin: 0 0 20px;
+  font-size: clamp(2rem, 3vw, 3.2rem);
+  letter-spacing: -0.04em;
+}
+.final-cta-section p {
+  margin: 0 auto 28px;
+  max-width: 720px;
+  color: rgba(255,255,255,0.82);
+  line-height: 1.6;
+}
+.final-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  padding: 0 24px;
+  border-radius: 8px;
+  background: #fff;
+  color: var(--color-primary);
+  font-weight: 900;
+}
