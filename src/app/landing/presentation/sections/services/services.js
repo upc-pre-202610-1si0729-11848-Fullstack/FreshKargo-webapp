@@ -7,7 +7,6 @@ const templatePath = '/src/app/landing/presentation/sections/services/services.h
 function buildServiceCard(service) {
   return `
     <article class="service-card ${service.highlighted ? 'is-highlighted' : ''}">
-      <span class="service-icon" aria-hidden="true">${service.icon}</span>
       <h3>${translate(`services.${service.key}.title`)}</h3>
       <p>${translate(`services.${service.key}.desc`)}</p>
     </article>

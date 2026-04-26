@@ -4,9 +4,9 @@
   display: flex;
   align-items: center;
   overflow: hidden;
-  background-image: url('/src/assets/images/warehouse-hero.svg');
+  background-image: url('/src/assets/images/imagen-hero.png');
   background-size: cover;
-  background-position: center;
+  background-position: center top;
 }
 .hero-overlay {
   position: absolute;

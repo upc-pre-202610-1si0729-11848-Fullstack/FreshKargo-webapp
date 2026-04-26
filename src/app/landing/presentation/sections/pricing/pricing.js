@@ -23,7 +23,7 @@ function buildPlan(plan) {
       <p class="plan-segment">${translate(`pricing.${plan.key}.segment`)}</p>
       <div class="plan-price">${getPlanPrice(plan)}</div>
       <ul class="plan-features">
-        ${plan.features.map((feature) => `<li>${feature}</li>`).join('')}
+        ${plan.features.map((feature) => `<li>${translate(feature)}</li>`).join('')}
       </ul>
       <a class="plan-button" href="#contact">${getPlanButton(plan)}</a>
     </article>

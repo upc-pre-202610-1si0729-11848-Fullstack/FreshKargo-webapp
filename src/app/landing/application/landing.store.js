@@ -27,34 +27,34 @@ export const landingStore = {
   ],
   plans: [
     createPricingPlan('basic', '$299', [
-      'Hasta 5 unidades/logística básica',
-      'Monitoreo básico',
-      'Control de temperatura',
-      'Reportes mensuales',
-      'Soporte por correo'
+      'pricing.basic.f1',
+      'pricing.basic.f2',
+      'pricing.basic.f3',
+      'pricing.basic.f4',
+      'pricing.basic.f5'
     ]),
     createPricingPlan('professional', '$799', [
-      'Hasta 25 vehículos',
-      'Rastreo GPS en tiempo real',
-      'Analítica avanzada + IA',
-      'Optimización de rutas',
-      'Integraciones API',
-      'Soporte prioritario 24/7'
+      'pricing.pro.f1',
+      'pricing.pro.f2',
+      'pricing.pro.f3',
+      'pricing.pro.f4',
+      'pricing.pro.f5',
+      'pricing.pro.f6'
     ], true),
     createPricingPlan('enterprise', 'custom', [
-      'Operación escalable',
-      'Módulos personalizados',
-      'SLA garantizado',
-      'Gestor de cuenta dedicado',
-      'Capacitación especializada',
-      'Infraestructura dedicada'
+      'pricing.ent.f1',
+      'pricing.ent.f2',
+      'pricing.ent.f3',
+      'pricing.ent.f4',
+      'pricing.ent.f5',
+      'pricing.ent.f6'
     ])
   ],
   teamMembers: [
-    createTeamMember('Josue R', 'Frontend Developer'),
-    createTeamMember('Jennifer Riveros', 'Frontend Developer'),
-    createTeamMember('Rodrigo Velasquez', 'Frontend Developer'),
-    createTeamMember('Rodrigo Saavedra', 'Frontend Developer'),
-    createTeamMember('Rodrigo Saavedra', 'Frontend Developer')
+    createTeamMember('Josué Carpio', '', '/src/assets/images/Josue.png'),
+    createTeamMember('Jennifer Riveros', '', '/src/assets/images/Jennifer.jpeg'),
+    createTeamMember('Felix', '', '/src/assets/images/Felix.jpeg'),
+    createTeamMember('Rodrigo', '', '/src/assets/images/Rodrigo.jpeg'),
+    createTeamMember('Andree', '', '/src/assets/images/Andree.jpeg')
   ]
 };

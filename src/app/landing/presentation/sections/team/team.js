@@ -8,7 +8,7 @@ function buildTeamCard(member) {
   return `
     <article class="team-card">
       <h3>${member.name}</h3>
-      <p>${member.role}</p>
+      ${member.role ? `<p>${member.role}</p>` : ''}
       <img src="${member.image}" alt="${member.name} profile placeholder" />
     </article>
   `;

@@ -23,7 +23,7 @@
   color: #111827;
   font-weight: 900;
 }
-.brand-logo { width: 32px; height: 32px; }
+.brand-logo { height: 32px; width: auto; display: block; }
 .main-nav {
   display: flex;
   align-items: center;
