@@ -1,0 +1,363 @@
+<div class="dashboard">
+
+  <div class="dashboard-top">
+
+    <div class="dashboard-title">
+
+      <h1>Control Tower</h1>
+
+      <p>
+        Monitor perishable inventory, active shipments, and operational risks from one centralized dashboard.
+      </p>
+
+      <div class="sub-info">
+        <span>99.8% availability target</span>
+        <span>•</span>
+        <span>Multi-warehouse monitoring</span>
+        <span>•</span>
+        <span>Real-time operational overview</span>
+      </div>
+
+    </div>
+
+    <div class="dashboard-status">
+      <span></span>
+      Last updated: 2 min ago
+    </div>
+
+  </div>
+
+  <div class="dashboard-filters">
+
+    <button>
+      Last 7 days
+      <span class="material-symbols-outlined">expand_more</span>
+    </button>
+
+    <button>
+      All warehouses
+      <span class="material-symbols-outlined">expand_more</span>
+    </button>
+
+    <button>
+      <span class="material-symbols-outlined">download</span>
+      Export report
+    </button>
+
+  </div>
+
+  <div class="cards-grid">
+
+    <app-stats-card
+      title="Inventory Health"
+      value="94%"
+      icon="inventory_2"
+    />
+
+    <app-stats-card
+      title="Active Shipments"
+      value="128"
+      icon="local_shipping"
+    />
+
+    <app-stats-card
+      title="Cold Chain Compliance"
+      value="97.8%"
+      icon="ac_unit"
+    />
+
+    <app-stats-card
+      title="Spoilage Risk"
+      value="Low"
+      icon="warning"
+    />
+
+  </div>
+
+  <div class="analytics-grid">
+
+    <div class="operations-card">
+
+      <div class="operations-header">
+
+        <div>
+          <h2>Operations Analytics</h2>
+
+          <p>
+            Shipment performance over the last 6 months
+          </p>
+        </div>
+
+        <div class="chart-tabs">
+
+          <button class="chart-tab active">
+            Daily
+          </button>
+
+          <button class="chart-tab">
+            Weekly
+          </button>
+
+          <button class="chart-tab">
+            Monthly
+          </button>
+
+        </div>
+
+      </div>
+
+      <div class="operations-chart">
+
+        <canvas
+          baseChart
+          [data]="operationsChartData"
+          [options]="operationsChartOptions"
+          [type]="operationsChartType">
+        </canvas>
+
+      </div>
+
+      <div class="operations-footer">
+
+        <div class="chart-legend">
+          <span></span>
+          Shipment Growth
+        </div>
+
+        <strong>
+          +18.2%
+        </strong>
+
+      </div>
+
+    </div>
+
+    <div class="alerts-card">
+
+      <div class="alerts-header">
+        <h2>Operational Alerts</h2>
+        <p>Issues requiring attention</p>
+      </div>
+
+      <div class="alerts-container">
+
+        <div class="alert-box">
+          <div>
+            <h4>Temperature deviation detected</h4>
+            <p>Batch: FK-2841</p>
+            <p>Location: Warehouse North</p>
+          </div>
+
+          <span class="alert-tag high">High</span>
+        </div>
+
+        <div class="alert-box">
+          <div>
+            <h4>Delayed shipment</h4>
+            <p>Route: Lima → Callao</p>
+            <p>ETA delayed by 2h</p>
+          </div>
+
+          <span class="alert-tag medium">Medium</span>
+        </div>
+
+        <div class="alert-box">
+          <div>
+            <h4>Low stock warning</h4>
+            <p>Product: Fresh avocados</p>
+            <p>Available units: 42</p>
+          </div>
+
+          <span class="alert-tag attention">Attention</span>
+        </div>
+
+      </div>
+
+      <button class="view-alerts-btn">
+        View all alerts
+      </button>
+
+    </div>
+
+  </div>
+
+  <div class="bottom-grid">
+
+    <div class="mini-card category-card">
+
+      <h2>Inventory by Category</h2>
+
+      <div class="progress-item">
+        <span>Fruits</span>
+        <span>32%</span>
+      </div>
+
+      <div class="progress-bar">
+        <div class="progress-fill fill-1"></div>
+      </div>
+
+      <div class="progress-item">
+        <span>Vegetables</span>
+        <span>24%</span>
+      </div>
+
+      <div class="progress-bar">
+        <div class="progress-fill fill-2"></div>
+      </div>
+
+      <div class="progress-item">
+        <span>Dairy</span>
+        <span>18%</span>
+      </div>
+
+      <div class="progress-bar">
+        <div class="progress-fill fill-3"></div>
+      </div>
+
+      <div class="progress-item">
+        <span>Frozen</span>
+        <span>15%</span>
+      </div>
+
+      <div class="progress-bar">
+        <div class="progress-fill fill-4"></div>
+      </div>
+
+      <div class="progress-item">
+        <span>Ready-to-ship</span>
+        <span>11%</span>
+      </div>
+
+      <div class="progress-bar">
+        <div class="progress-fill fill-5"></div>
+      </div>
+
+    </div>
+
+    <div class="mini-card">
+
+      <h2>Warehouse Performance</h2>
+
+      <div class="warehouse-box">
+        <div>
+          <h4>Lima Central</h4>
+          <p>On-time: 96% &nbsp; Avg. temp: 4°C</p>
+        </div>
+
+        <span class="green-status">Low</span>
+      </div>
+
+      <div class="warehouse-box">
+        <div>
+          <h4>North Hub</h4>
+          <p>On-time: 91% &nbsp; Avg. temp: 6°C</p>
+        </div>
+
+        <span class="yellow-status">Medium</span>
+      </div>
+
+      <div class="warehouse-box">
+        <div>
+          <h4>South Hub</h4>
+          <p>On-time: 94% &nbsp; Avg. temp: 5°C</p>
+        </div>
+
+        <span class="green-status">Low</span>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="recent-orders">
+
+    <div class="section-header">
+
+      <h2>Recent Shipments</h2>
+
+      <div class="table-actions">
+
+        <button class="filter-btn">
+          Filter status
+          <span class="material-symbols-outlined">expand_more</span>
+        </button>
+
+        <button class="view-all-btn">
+          View all
+        </button>
+
+      </div>
+
+    </div>
+
+    <table class="shipments-table">
+
+      <thead>
+      <tr>
+        <th>Shipment ID</th>
+        <th>Product</th>
+        <th>Route</th>
+        <th>Temperature</th>
+        <th>ETA</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+      </thead>
+
+      <tbody>
+
+      <tr>
+        <td>FK-1023</td>
+        <td>Berries</td>
+        <td>Lima → Surco</td>
+        <td>3°C</td>
+        <td>12:30 PM</td>
+        <td>
+          <span class="status-blue">In Transit</span>
+        </td>
+        <td class="view-link">View</td>
+      </tr>
+
+      <tr>
+        <td>FK-1024</td>
+        <td>Lettuce</td>
+        <td>Callao → Miraflores</td>
+        <td>5°C</td>
+        <td>1:15 PM</td>
+        <td>
+          <span class="status-green">Delivered</span>
+        </td>
+        <td class="view-link">View</td>
+      </tr>
+
+      <tr>
+        <td>FK-1025</td>
+        <td>Dairy</td>
+        <td>Lima → San Isidro</td>
+        <td>6°C</td>
+        <td>2:40 PM</td>
+        <td>
+          <span class="status-red">Delayed</span>
+        </td>
+        <td class="view-link">View</td>
+      </tr>
+
+      <tr>
+        <td>FK-1026</td>
+        <td>Chicken</td>
+        <td>Surco → Barranco</td>
+        <td>2°C</td>
+        <td>3:00 PM</td>
+        <td>
+          <span class="status-blue">In Transit</span>
+        </td>
+        <td class="view-link">View</td>
+      </tr>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+</div>
