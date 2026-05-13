@@ -3,15 +3,15 @@
     {
       "id": 1,
       "code": "PRD-001",
-      "name": "Fresh Strawberries",
+      "name": "Fresh Berries",
       "warehouse": "Lima Central",
-      "expiryDate": "2026-04-28",
+      "expiryDate": "2026-04-24",
       "category": "Fruits",
-      "stock": 450,
+      "stock": 150,
       "temperature": "3°C",
-      "status": "Good",
-      "batch": "BT-4501",
-      "minStock": 80
+      "status": "Critical",
+      "batch": "BT-4521",
+      "minStock": 30
     },
     {
       "id": 2,
@@ -64,6 +64,19 @@
       "status": "Low Stock",
       "batch": "BT-4503",
       "minStock": 50
+    },
+    {
+      "code": "PRD-006",
+      "name": "fgdfgdf",
+      "warehouse": "Lima Central",
+      "expiryDate": "2026-05-22",
+      "category": "Ready-to-ship",
+      "stock": 465,
+      "temperature": "10°C",
+      "batch": "BT-4506",
+      "minStock": 45,
+      "status": "Good",
+      "id": 6
     }
   ],
   "shipments": [

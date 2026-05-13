@@ -92,7 +92,7 @@
         </span>
       </div>
 
-      <h2>1,842</h2>
+      <h2>{{ totalInventoryUnits }}</h2>
       <small class="positive">+12% vs last month</small>
     </article>
 
@@ -104,7 +104,7 @@
         </span>
       </div>
 
-      <h2>542</h2>
+      <h2>{{ expiringSoonCount }}</h2>
       <small class="warning">Within 3 days</small>
     </article>
 
@@ -116,8 +116,8 @@
         </span>
       </div>
 
-      <h2>1,450</h2>
-      <small>78.7% of total</small>
+      <h2>{{ coldStorageItems }}</h2>
+      <small>{{ coldStoragePercent }} of total</small>
     </article>
 
     <article class="stat-card">
@@ -128,7 +128,7 @@
         </span>
       </div>
 
-      <h2>8</h2>
+      <h2>{{ lowStockItems }}</h2>
       <small class="danger">Need reorder</small>
     </article>
 
@@ -142,7 +142,7 @@
 
       <div
         class="stock-row"
-        *ngFor="let item of categoryStock">
+        *ngFor="let item of categoryStockSummary">
 
         <div class="stock-label">
           <span>{{ item.name }}</span>
@@ -152,7 +152,8 @@
         <div class="progress-track">
           <div
             class="progress-fill"
-            [ngClass]="item.className">
+            [ngClass]="item.className"
+            [style.width.%]="item.percent">
           </div>
         </div>
 
@@ -169,7 +170,7 @@
 
         <div
           class="expiring-item"
-          *ngFor="let item of expiringItems">
+          *ngFor="let item of expiringProducts">
 
           <div>
             <h3>{{ item.name }}</h3>
@@ -330,7 +331,8 @@
           <label>Product ID</label>
           <input
             type="text"
-            [(ngModel)]="newProduct.id"
+            [(ngModel)]="newProduct.code"
+            readonly
           />
         </div>
 
@@ -389,10 +391,10 @@
         <div class="form-row">
 
           <div class="form-group">
-            <label>Temperature</label>
+            <label>Temperature (°C)</label>
             <input
-              type="text"
-              placeholder="3°C"
+              type="number"
+              placeholder="3"
               [(ngModel)]="newProduct.temperature"
             />
           </div>
@@ -401,7 +403,7 @@
             <label>Batch</label>
             <input
               type="text"
-              placeholder="BT-4501"
+              placeholder="Auto generated"
               [(ngModel)]="newProduct.batch"
             />
           </div>
