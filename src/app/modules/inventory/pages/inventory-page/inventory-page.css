@@ -809,3 +809,71 @@ td:nth-child(6) {
 .delete-btn:hover {
   background: #fecaca;
 }
+.details-modal {
+  max-width: 720px;
+}
+
+.modal-header p {
+  margin: 6px 0 0;
+  color: #64748b;
+  font-size: 14px;
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.detail-item {
+  padding: 16px;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  background: #f8fafc;
+}
+
+.detail-item span {
+  display: block;
+  margin-bottom: 6px;
+  color: #64748b;
+  font-size: 13px;
+}
+
+.detail-item strong {
+  color: #111827;
+  font-size: 15px;
+}
+
+.confirm-modal {
+  max-width: 520px;
+}
+
+.confirm-text {
+  margin: 24px 0;
+  color: #475569;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.delete-confirm-btn {
+  height: 46px;
+  padding: 0 22px;
+  border: none;
+  border-radius: 14px;
+  background: #ef4444;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.delete-confirm-btn:hover {
+  background: #dc2626;
+}
+
+@media (max-width: 720px) {
+  .detail-grid {
+    grid-template-columns: 1fr;
+  }
+}

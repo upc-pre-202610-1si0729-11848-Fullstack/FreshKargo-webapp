@@ -39,6 +39,11 @@ export class InventoryPage implements OnInit {
   isAddModalOpen = false;
   isEditing = false;
   editingProductId: number | null = null;
+  isViewModalOpen = false;
+  isDeleteModalOpen = false;
+
+  selectedProduct: InventoryProduct | null = null;
+  productToDelete: InventoryProduct | null = null;
 
   searchText = '';
   selectedCategory = 'All categories';
@@ -228,6 +233,43 @@ export class InventoryPage implements OnInit {
     this.isAddModalOpen = false;
   }
 
+  openViewModal(product: InventoryProduct): void {
+    this.selectedProduct = product;
+    this.isViewModalOpen = true;
+  }
+
+  closeViewModal(): void {
+    this.selectedProduct = null;
+    this.isViewModalOpen = false;
+  }
+
+  openDeleteModal(product: InventoryProduct): void {
+    this.productToDelete = product;
+    this.isDeleteModalOpen = true;
+  }
+
+  closeDeleteModal(): void {
+    this.productToDelete = null;
+    this.isDeleteModalOpen = false;
+  }
+
+  confirmDeleteProduct(): void {
+    if (!this.productToDelete) {
+      return;
+    }
+
+    this.inventoryService.deleteProduct(this.productToDelete.id).subscribe({
+      next: () => {
+        this.loadProducts();
+        this.closeDeleteModal();
+        this.showToastMessage('Product deleted successfully');
+      },
+      error: () => {
+        this.showToastMessage('Error deleting product');
+      },
+    });
+  }
+
   showToastMessage(message: string): void {
     this.toastMessage = message;
     this.showToast = true;
@@ -297,18 +339,6 @@ export class InventoryPage implements OnInit {
       },
       error: () => {
         this.showToastMessage('Error adding product');
-      },
-    });
-  }
-
-  deleteProduct(product: InventoryProduct): void {
-    this.inventoryService.deleteProduct(product.id).subscribe({
-      next: () => {
-        this.loadProducts();
-        this.showToastMessage('Product deleted successfully');
-      },
-      error: () => {
-        this.showToastMessage('Error deleting product');
       },
     });
   }

@@ -64,19 +64,6 @@
       "status": "Low Stock",
       "batch": "BT-4503",
       "minStock": 50
-    },
-    {
-      "code": "PRD-006",
-      "name": "fgdfgdf",
-      "warehouse": "Lima Central",
-      "expiryDate": "2026-05-22",
-      "category": "Ready-to-ship",
-      "stock": 465,
-      "temperature": "10°C",
-      "batch": "BT-4506",
-      "minStock": 45,
-      "status": "Good",
-      "id": 6
     }
   ],
   "shipments": [
