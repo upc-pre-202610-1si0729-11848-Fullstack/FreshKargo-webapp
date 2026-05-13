@@ -7,18 +7,21 @@ import {
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
-interface InventoryProduct {
-  id: string;
+import { InventoryProduct } from '../../domain/model/product.entity';
+import { InventoryService } from '../../infrastructure/services/inventory.service';
+
+type InventoryFormProduct = {
+  id: number | null;
+  code: string;
   name: string;
   warehouse: string;
   expiryDate: string;
   category: string;
   stock: number;
   temperature: string;
-  status: 'Good' | 'Expiring Soon' | 'Critical' | 'Low Stock';
   batch: string;
   minStock: number;
-}
+};
 
 @Component({
   selector: 'app-inventory-page',
@@ -33,12 +36,13 @@ interface InventoryProduct {
 export class InventoryPage implements OnInit {
 
   constructor(
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private inventoryService: InventoryService
   ) {}
 
   isAddModalOpen = false;
   isEditing = false;
-  editingIndex: number | null = null;
+  editingProductId: number | null = null;
 
   searchText = '';
   selectedCategory = 'All categories';
@@ -48,8 +52,11 @@ export class InventoryPage implements OnInit {
   toastMessage = '';
   showToast = false;
 
-  newProduct = {
-    id: '',
+  products: InventoryProduct[] = [];
+
+  newProduct: InventoryFormProduct = {
+    id: null,
+    code: '',
     name: '',
     warehouse: 'Lima Central',
     expiryDate: '',
@@ -61,162 +68,43 @@ export class InventoryPage implements OnInit {
   };
 
   categoryStock = [
-    {
-      name: 'Fruits',
-      units: 820,
-      percent: 45,
-      className: 'fill-fruits',
-    },
-    {
-      name: 'Vegetables',
-      units: 610,
-      percent: 33,
-      className: 'fill-vegetables',
-    },
-    {
-      name: 'Dairy',
-      units: 180,
-      percent: 10,
-      className: 'fill-dairy',
-    },
-    {
-      name: 'Frozen',
-      units: 160,
-      percent: 9,
-      className: 'fill-frozen',
-    },
-    {
-      name: 'Ready-to-ship',
-      units: 72,
-      percent: 3,
-      className: 'fill-ready',
-    },
+    { name: 'Fruits', units: 820, percent: 45, className: 'fill-fruits' },
+    { name: 'Vegetables', units: 610, percent: 33, className: 'fill-vegetables' },
+    { name: 'Dairy', units: 180, percent: 10, className: 'fill-dairy' },
+    { name: 'Frozen', units: 160, percent: 9, className: 'fill-frozen' },
+    { name: 'Ready-to-ship', units: 72, percent: 3, className: 'fill-ready' },
   ];
 
   expiringItems = [
-    {
-      name: 'Fresh Milk',
-      batch: 'BT-4521',
-      units: 180,
-      warehouse: 'Lima Central',
-      date: 'Apr 24',
-    },
-    {
-      name: 'Organic Lettuce',
-      batch: 'BT-4518',
-      units: 320,
-      warehouse: 'North Hub',
-      date: 'Apr 25',
-    },
-    {
-      name: 'Fresh Avocados',
-      batch: 'BT-4503',
-      units: 42,
-      warehouse: 'Lima Central',
-      date: 'Apr 26',
-    },
+    { name: 'Fresh Milk', batch: 'BT-4521', units: 180, warehouse: 'Lima Central', date: 'Apr 24' },
+    { name: 'Organic Lettuce', batch: 'BT-4518', units: 320, warehouse: 'North Hub', date: 'Apr 25' },
+    { name: 'Fresh Avocados', batch: 'BT-4503', units: 42, warehouse: 'Lima Central', date: 'Apr 26' },
   ];
 
-  products: InventoryProduct[] = [];
-
-  ngOnInit() {
-    const savedProducts = localStorage.getItem('inventory');
-
-    if (savedProducts) {
-      this.products = JSON.parse(savedProducts);
-    } else {
-      this.products = [
-        {
-          id: 'PRD-001',
-          name: 'Fresh Strawberries',
-          warehouse: 'Lima Central',
-          expiryDate: '2026-04-28',
-          category: 'Fruits',
-          stock: 450,
-          temperature: '3°C',
-          status: 'Good',
-          batch: 'BT-4501',
-          minStock: 80,
-        },
-        {
-          id: 'PRD-002',
-          name: 'Organic Lettuce',
-          warehouse: 'North Hub',
-          expiryDate: '2026-04-25',
-          category: 'Vegetables',
-          stock: 320,
-          temperature: '5°C',
-          status: 'Expiring Soon',
-          batch: 'BT-4518',
-          minStock: 60,
-        },
-        {
-          id: 'PRD-003',
-          name: 'Fresh Milk',
-          warehouse: 'Lima Central',
-          expiryDate: '2026-04-24',
-          category: 'Dairy',
-          stock: 180,
-          temperature: '4°C',
-          status: 'Critical',
-          batch: 'BT-4521',
-          minStock: 40,
-        },
-        {
-          id: 'PRD-004',
-          name: 'Frozen Chicken',
-          warehouse: 'South Hub',
-          expiryDate: '2026-06-15',
-          category: 'Frozen',
-          stock: 560,
-          temperature: '-18°C',
-          status: 'Good',
-          batch: 'BT-4498',
-          minStock: 120,
-        },
-        {
-          id: 'PRD-005',
-          name: 'Fresh Avocados',
-          warehouse: 'Lima Central',
-          expiryDate: '2026-04-26',
-          category: 'Fruits',
-          stock: 42,
-          temperature: '6°C',
-          status: 'Low Stock',
-          batch: 'BT-4503',
-          minStock: 50,
-        },
-        {
-          id: 'PRD-006',
-          name: 'Cherry Tomatoes',
-          warehouse: 'North Hub',
-          expiryDate: '2026-04-30',
-          category: 'Vegetables',
-          stock: 290,
-          temperature: '8°C',
-          status: 'Good',
-          batch: 'BT-4511',
-          minStock: 70,
-        },
-      ];
-
-      this.saveProducts();
-    }
+  ngOnInit(): void {
+    this.loadProducts();
   }
 
-  saveProducts() {
-    localStorage.setItem(
-      'inventory',
-      JSON.stringify(this.products)
-    );
+  loadProducts(): void {
+    this.inventoryService.getProducts().subscribe({
+      next: (products) => {
+        this.products = [...products];
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        this.showToastMessage('Error loading products');
+      }
+    });
   }
 
-  get filteredProducts() {
+  get filteredProducts(): InventoryProduct[] {
     return this.products.filter(product => {
+      const query = this.searchText.toLowerCase();
+
       const matchesSearch =
-        product.name.toLowerCase().includes(this.searchText.toLowerCase())
-        || product.id.toLowerCase().includes(this.searchText.toLowerCase())
-        || product.category.toLowerCase().includes(this.searchText.toLowerCase());
+        product.name.toLowerCase().includes(query)
+        || product.code.toLowerCase().includes(query)
+        || product.category.toLowerCase().includes(query);
 
       const matchesCategory =
         this.selectedCategory === 'All categories'
@@ -234,12 +122,13 @@ export class InventoryPage implements OnInit {
     });
   }
 
-  openAddModal() {
+  openAddModal(): void {
     this.isEditing = false;
-    this.editingIndex = null;
+    this.editingProductId = null;
 
     this.newProduct = {
-      id: this.generateProductId(),
+      id: null,
+      code: this.inventoryService.generateProductCode(this.products),
       name: '',
       warehouse: 'Lima Central',
       expiryDate: '',
@@ -253,12 +142,13 @@ export class InventoryPage implements OnInit {
     this.isAddModalOpen = true;
   }
 
-  openEditModal(product: InventoryProduct, index: number) {
+  openEditModal(product: InventoryProduct): void {
     this.isEditing = true;
-    this.editingIndex = index;
+    this.editingProductId = product.id;
 
     this.newProduct = {
       id: product.id,
+      code: product.code,
       name: product.name,
       warehouse: product.warehouse,
       expiryDate: product.expiryDate,
@@ -272,43 +162,13 @@ export class InventoryPage implements OnInit {
     this.isAddModalOpen = true;
   }
 
-  closeAddModal() {
+  closeAddModal(): void {
     this.isAddModalOpen = false;
   }
 
-  generateProductId() {
-    const nextNumber = this.products.length + 1;
-
-    return `PRD-${String(nextNumber).padStart(3, '0')}`;
-  }
-
-  getProductStatus(stock: number, expiryDate: string): InventoryProduct['status'] {
-    if (stock <= 30) {
-      return 'Critical';
-    }
-
-    if (stock <= 50) {
-      return 'Low Stock';
-    }
-
-    if (expiryDate) {
-      const today = new Date();
-      const expiry = new Date(expiryDate);
-      const difference = expiry.getTime() - today.getTime();
-      const daysLeft = Math.ceil(difference / (1000 * 60 * 60 * 24));
-
-      if (daysLeft <= 3) {
-        return 'Expiring Soon';
-      }
-    }
-
-    return 'Good';
-  }
-
-  showToastMessage(message: string) {
+  showToastMessage(message: string): void {
     this.toastMessage = message;
     this.showToast = true;
-
     this.cdr.detectChanges();
 
     setTimeout(() => {
@@ -317,9 +177,46 @@ export class InventoryPage implements OnInit {
     }, 2400);
   }
 
-  saveProduct() {
-    const productData: InventoryProduct = {
-      id: this.newProduct.id,
+  saveProduct(): void {
+    const status = this.inventoryService.getProductStatus(
+      this.newProduct.stock,
+      this.newProduct.expiryDate
+    );
+
+    if (this.isEditing && this.editingProductId !== null && this.newProduct.id !== null) {
+      const productData: InventoryProduct = {
+        id: this.newProduct.id,
+        code: this.newProduct.code,
+        name: this.newProduct.name,
+        warehouse: this.newProduct.warehouse,
+        expiryDate: this.newProduct.expiryDate,
+        category: this.newProduct.category,
+        stock: this.newProduct.stock,
+        temperature: this.newProduct.temperature,
+        batch: this.newProduct.batch,
+        minStock: this.newProduct.minStock,
+        status,
+      };
+
+      this.inventoryService.updateProduct(
+        this.editingProductId,
+        productData
+      ).subscribe({
+        next: () => {
+          this.loadProducts();
+          this.closeAddModal();
+          this.showToastMessage('Product updated successfully');
+        },
+        error: () => {
+          this.showToastMessage('Error updating product');
+        }
+      });
+
+      return;
+    }
+
+    const productData: Omit<InventoryProduct, 'id'> = {
+      code: this.newProduct.code,
       name: this.newProduct.name,
       warehouse: this.newProduct.warehouse,
       expiryDate: this.newProduct.expiryDate,
@@ -328,32 +225,31 @@ export class InventoryPage implements OnInit {
       temperature: this.newProduct.temperature,
       batch: this.newProduct.batch,
       minStock: this.newProduct.minStock,
-      status: this.getProductStatus(
-        this.newProduct.stock,
-        this.newProduct.expiryDate
-      ),
+      status,
     };
 
-    if (this.isEditing && this.editingIndex !== null) {
-      this.products[this.editingIndex] = productData;
-
-      this.showToastMessage('Product updated successfully');
-    } else {
-      this.products.unshift(productData);
-
-      this.showToastMessage('Product added successfully');
-    }
-
-    this.saveProducts();
-    this.closeAddModal();
+    this.inventoryService.addProduct(productData).subscribe({
+      next: () => {
+        this.loadProducts();
+        this.closeAddModal();
+        this.showToastMessage('Product added successfully');
+      },
+      error: () => {
+        this.showToastMessage('Error adding product');
+      }
+    });
   }
 
-  deleteProduct(index: number) {
-    this.products.splice(index, 1);
-
-    this.saveProducts();
-
-    this.showToastMessage('Product deleted successfully');
+  deleteProduct(product: InventoryProduct): void {
+    this.inventoryService.deleteProduct(product.id).subscribe({
+      next: () => {
+        this.loadProducts();
+        this.showToastMessage('Product deleted successfully');
+      },
+      error: () => {
+        this.showToastMessage('Error deleting product');
+      }
+    });
   }
 
 }
