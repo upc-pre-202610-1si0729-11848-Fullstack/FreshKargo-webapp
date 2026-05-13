@@ -279,7 +279,7 @@
 
               <button
                 class="min-stock-btn"
-                (click)="showToastMessage('Minimum stock checked')">
+                (click)="openMinStockModal(product)">
 
                 Min Stock
               </button>
@@ -508,7 +508,7 @@
   </div>
 
   <div
-    
+
     class="modal-overlay"
     *ngIf="isDeleteModalOpen && productToDelete">
 
@@ -539,6 +539,57 @@
           class="delete-confirm-btn"
           (click)="confirmDeleteProduct()">
           Delete Product
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+  <div
+    class="modal-overlay"
+    *ngIf="isMinStockModalOpen && productToUpdateMinStock">
+
+    <div class="modal confirm-modal">
+
+      <div class="modal-header">
+        <div>
+          <h2>Update Minimum Stock</h2>
+          <p>{{ productToUpdateMinStock.name }} • {{ productToUpdateMinStock.code }}</p>
+        </div>
+
+        <button (click)="closeMinStockModal()">
+          ✕
+        </button>
+      </div>
+
+      <div class="form-group">
+        <label>Current Stock</label>
+        <input
+          type="number"
+          [value]="productToUpdateMinStock.stock"
+          readonly
+        />
+      </div>
+
+      <div class="form-group">
+        <label>Minimum Stock</label>
+        <input
+          type="number"
+          [(ngModel)]="newMinStockValue"
+        />
+      </div>
+
+      <div class="modal-footer">
+        <button
+          class="secondary-btn"
+          (click)="closeMinStockModal()">
+          Cancel
+        </button>
+
+        <button
+          class="primary-btn"
+          (click)="saveMinStock()">
+          Save Min Stock
         </button>
       </div>
 

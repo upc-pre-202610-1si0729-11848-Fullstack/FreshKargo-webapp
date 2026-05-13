@@ -45,6 +45,10 @@ export class InventoryPage implements OnInit {
   selectedProduct: InventoryProduct | null = null;
   productToDelete: InventoryProduct | null = null;
 
+  isMinStockModalOpen = false;
+  productToUpdateMinStock: InventoryProduct | null = null;
+  newMinStockValue = 0;
+
   searchText = '';
   selectedCategory = 'All categories';
   selectedWarehouse = 'All warehouses';
@@ -156,7 +160,21 @@ export class InventoryPage implements OnInit {
   loadProducts(): void {
     this.inventoryService.getProducts().subscribe({
       next: (products) => {
-        this.products = [...products];
+        this.products = products.map((product) => {
+          let calculatedStatus = this.inventoryService.getProductStatus(
+            product.stock,
+            product.expiryDate,
+          );
+
+          if (product.stock <= product.minStock) {
+            calculatedStatus = 'Low Stock';
+          }
+          
+          return {
+            ...product,
+            status: calculatedStatus,
+          };
+        });
         this.cdr.detectChanges();
       },
       error: () => {
@@ -266,6 +284,48 @@ export class InventoryPage implements OnInit {
       },
       error: () => {
         this.showToastMessage('Error deleting product');
+      },
+    });
+  }
+
+  openMinStockModal(product: InventoryProduct): void {
+    this.productToUpdateMinStock = product;
+    this.newMinStockValue = product.minStock;
+    this.isMinStockModalOpen = true;
+  }
+
+  closeMinStockModal(): void {
+    this.productToUpdateMinStock = null;
+    this.newMinStockValue = 0;
+    this.isMinStockModalOpen = false;
+  }
+
+  saveMinStock(): void {
+    if (!this.productToUpdateMinStock) {
+      return;
+    }
+
+    const updatedProduct: InventoryProduct = {
+      ...this.productToUpdateMinStock,
+      minStock: Number(this.newMinStockValue),
+      status: this.inventoryService.getProductStatus(
+        this.productToUpdateMinStock.stock,
+        this.productToUpdateMinStock.expiryDate,
+      ),
+    };
+
+    if (updatedProduct.stock <= updatedProduct.minStock) {
+      updatedProduct.status = 'Low Stock';
+    }
+
+    this.inventoryService.updateProduct(updatedProduct.id, updatedProduct).subscribe({
+      next: () => {
+        this.loadProducts();
+        this.closeMinStockModal();
+        this.showToastMessage('Minimum stock updated successfully');
+      },
+      error: () => {
+        this.showToastMessage('Error updating minimum stock');
       },
     });
   }

@@ -877,3 +877,23 @@ td:nth-child(6) {
     grid-template-columns: 1fr;
   }
 }
+.confirm-modal .form-group {
+  margin-top: 22px;
+}
+
+.confirm-modal .form-group label {
+  display: block;
+  margin-bottom: 10px;
+  color: #334155;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.confirm-modal .form-group input {
+  width: 100%;
+  height: 54px;
+}
+
+.confirm-modal .modal-footer {
+  margin-top: 34px;
+}
