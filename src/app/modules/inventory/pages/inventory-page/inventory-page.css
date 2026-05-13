@@ -897,3 +897,22 @@ td:nth-child(6) {
 .confirm-modal .modal-footer {
   margin-top: 34px;
 }
+
+.stat-card,
+.panel-card,
+.products-card,
+.detail-item {
+  transition:
+    transform 0.22s ease,
+    box-shadow 0.22s ease,
+    border-color 0.22s ease;
+}
+
+.stat-card:hover,
+.panel-card:hover,
+.products-card:hover,
+.detail-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.12);
+  border-color: rgba(64, 86, 180, 0.22);
+}

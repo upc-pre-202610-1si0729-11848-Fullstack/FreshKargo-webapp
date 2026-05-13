@@ -9,9 +9,9 @@
       "category": "Fruits",
       "stock": 150,
       "temperature": "3°C",
-      "status": "Critical",
       "batch": "BT-4521",
-      "minStock": 30
+      "minStock": 30,
+      "status": "Expiring Soon"
     },
     {
       "id": 2,
@@ -20,7 +20,7 @@
       "warehouse": "North Hub",
       "expiryDate": "2026-04-25",
       "category": "Vegetables",
-      "stock": 320,
+      "stock": 220,
       "temperature": "5°C",
       "status": "Expiring Soon",
       "batch": "BT-4518",
@@ -33,9 +33,9 @@
       "warehouse": "Lima Central",
       "expiryDate": "2026-04-24",
       "category": "Dairy",
-      "stock": 180,
+      "stock": 130,
       "temperature": "4°C",
-      "status": "Critical",
+      "status": "Expiring Soon",
       "batch": "BT-4521",
       "minStock": 40
     },
@@ -46,11 +46,11 @@
       "warehouse": "South Hub",
       "expiryDate": "2026-06-15",
       "category": "Frozen",
-      "stock": 560,
+      "stock": 400,
       "temperature": "-18°C",
-      "status": "Good",
       "batch": "BT-4498",
-      "minStock": 120
+      "minStock": 120,
+      "status": "Good"
     },
     {
       "id": 5,

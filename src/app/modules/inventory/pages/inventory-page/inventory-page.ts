@@ -49,6 +49,14 @@ export class InventoryPage implements OnInit {
   productToUpdateMinStock: InventoryProduct | null = null;
   newMinStockValue = 0;
 
+  isWasteModalOpen = false;
+
+  wasteForm = {
+    productId: 0,
+    units: 0,
+    reason: 'Expired',
+  };
+
   searchText = '';
   selectedCategory = 'All categories';
   selectedWarehouse = 'All warehouses';
@@ -169,7 +177,7 @@ export class InventoryPage implements OnInit {
           if (product.stock <= product.minStock) {
             calculatedStatus = 'Low Stock';
           }
-          
+
           return {
             ...product,
             status: calculatedStatus,
@@ -326,6 +334,69 @@ export class InventoryPage implements OnInit {
       },
       error: () => {
         this.showToastMessage('Error updating minimum stock');
+      },
+    });
+  }
+  openWasteModal(): void {
+    this.wasteForm = {
+      productId: this.products.length > 0 ? this.products[0].id : 0,
+      units: 0,
+      reason: 'Expired',
+    };
+
+    this.isWasteModalOpen = true;
+  }
+
+  closeWasteModal(): void {
+    this.isWasteModalOpen = false;
+
+    this.wasteForm = {
+      productId: 0,
+      units: 0,
+      reason: 'Expired',
+    };
+  }
+
+  registerWaste(): void {
+    const selectedProduct = this.products.find(
+      (product) => product.id === Number(this.wasteForm.productId),
+    );
+
+    if (!selectedProduct || this.wasteForm.units <= 0) {
+      this.showToastMessage('Please complete the waste form');
+      return;
+    }
+
+    if (this.wasteForm.units > selectedProduct.stock) {
+      this.showToastMessage('Waste units cannot exceed current stock');
+      return;
+    }
+
+    const newStock = selectedProduct.stock - Number(this.wasteForm.units);
+
+    let calculatedStatus = this.inventoryService.getProductStatus(
+      newStock,
+      selectedProduct.expiryDate,
+    );
+
+    if (newStock <= selectedProduct.minStock) {
+      calculatedStatus = 'Low Stock';
+    }
+
+    const updatedProduct: InventoryProduct = {
+      ...selectedProduct,
+      stock: newStock,
+      status: calculatedStatus,
+    };
+
+    this.inventoryService.updateProduct(updatedProduct.id, updatedProduct).subscribe({
+      next: () => {
+        this.loadProducts();
+        this.closeWasteModal();
+        this.showToastMessage('Waste registered successfully');
+      },
+      error: () => {
+        this.showToastMessage('Error registering waste');
       },
     });
   }
