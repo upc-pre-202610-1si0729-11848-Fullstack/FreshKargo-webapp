@@ -1,8 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+
 import { ChartConfiguration, ChartOptions } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
+
 import { StatsCard } from '../../../../shared/components/stats-card/stats-card';
+import { DashboardService } from '../../infrastructure/services/dashboard.service';
 
 @Component({
   selector: 'app-dashboard-page',
@@ -15,67 +18,27 @@ import { StatsCard } from '../../../../shared/components/stats-card/stats-card';
   templateUrl: './dashboard-page.html',
   styleUrl: './dashboard-page.css'
 })
-export class DashboardPage {
+export class DashboardPage implements OnInit {
 
   public operationsChartType: 'line' = 'line';
 
   public operationsChartData: ChartConfiguration<'line'>['data'] = {
-    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-    datasets: [
-      {
-        data: [12, 19, 14, 22, 28, 35],
-        label: 'Shipment Growth',
-        fill: true,
-        tension: 0.4,
-        borderColor: '#3f51b5',
-        backgroundColor: 'rgba(63, 81, 181, 0.18)',
-        pointBackgroundColor: '#3f51b5',
-        pointBorderColor: '#3f51b5',
-        pointRadius: 5,
-        pointHoverRadius: 6,
-        borderWidth: 4
-      }
-    ]
+    labels: [],
+    datasets: []
   };
 
-  public operationsChartOptions: ChartOptions<'line'> = {
-    responsive: true,
-    maintainAspectRatio: false,
+  public operationsChartOptions: ChartOptions<'line'> = {};
 
-    plugins: {
-      legend: {
-        display: false
-      }
-    },
+  constructor(
+    private dashboardService: DashboardService
+  ) {}
 
-    scales: {
-      x: {
-        grid: {
-          color: 'rgba(148, 163, 184, 0.18)'
-        },
-        ticks: {
-          color: '#64748b',
-          font: {
-            size: 13
-          }
-        }
-      },
+  ngOnInit(): void {
+    const chart = this.dashboardService.getOperationsChart();
 
-      y: {
-        min: 10,
-        max: 35,
-        ticks: {
-          stepSize: 5,
-          color: '#64748b',
-          font: {
-            size: 13
-          }
-        },
-        grid: {
-          color: 'rgba(148, 163, 184, 0.18)'
-        }
-      }
-    }
-  };
+    this.operationsChartType = chart.type;
+    this.operationsChartData = chart.data;
+    this.operationsChartOptions = chart.options;
+  }
 
 }

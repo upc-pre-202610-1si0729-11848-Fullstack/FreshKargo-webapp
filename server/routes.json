@@ -1,0 +1,16 @@
+{
+  "/api/v1/products/:id": "/products/:id",
+  "/api/v1/products": "/products",
+
+  "/api/v1/shipments/:id": "/shipments/:id",
+  "/api/v1/shipments": "/shipments",
+
+  "/api/v1/warehouses/:id": "/warehouses/:id",
+  "/api/v1/warehouses": "/warehouses",
+
+  "/api/v1/routes/:id": "/routes/:id",
+  "/api/v1/routes": "/routes",
+
+  "/api/v1/dispatches/:id": "/dispatches/:id",
+  "/api/v1/dispatches": "/dispatches"
+}

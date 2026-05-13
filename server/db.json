@@ -1,0 +1,113 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "code": "PRD-001",
+      "name": "Fresh Strawberries",
+      "warehouse": "Lima Central",
+      "expiryDate": "2026-04-28",
+      "category": "Fruits",
+      "stock": 450,
+      "temperature": "3°C",
+      "status": "Good",
+      "batch": "BT-4501",
+      "minStock": 80
+    },
+    {
+      "id": 2,
+      "code": "PRD-002",
+      "name": "Organic Lettuce",
+      "warehouse": "North Hub",
+      "expiryDate": "2026-04-25",
+      "category": "Vegetables",
+      "stock": 320,
+      "temperature": "5°C",
+      "status": "Expiring Soon",
+      "batch": "BT-4518",
+      "minStock": 60
+    },
+    {
+      "id": 3,
+      "code": "PRD-003",
+      "name": "Fresh Milk",
+      "warehouse": "Lima Central",
+      "expiryDate": "2026-04-24",
+      "category": "Dairy",
+      "stock": 180,
+      "temperature": "4°C",
+      "status": "Critical",
+      "batch": "BT-4521",
+      "minStock": 40
+    },
+    {
+      "id": 4,
+      "code": "PRD-004",
+      "name": "Frozen Chicken",
+      "warehouse": "South Hub",
+      "expiryDate": "2026-06-15",
+      "category": "Frozen",
+      "stock": 560,
+      "temperature": "-18°C",
+      "status": "Good",
+      "batch": "BT-4498",
+      "minStock": 120
+    },
+    {
+      "id": 5,
+      "code": "PRD-005",
+      "name": "Fresh Avocados",
+      "warehouse": "Lima Central",
+      "expiryDate": "2026-04-26",
+      "category": "Fruits",
+      "stock": 42,
+      "temperature": "6°C",
+      "status": "Low Stock",
+      "batch": "BT-4503",
+      "minStock": 50
+    }
+  ],
+  "shipments": [
+    {
+      "id": "FK-1023",
+      "product": "Berries",
+      "batch": "BT-4521",
+      "temperature": "3°C",
+      "route": "Lima Central → Surco Market",
+      "driver": "Carlos M.",
+      "eta": "12:30 PM",
+      "status": "In Transit"
+    },
+    {
+      "id": "FK-1024",
+      "product": "Lettuce",
+      "batch": "BT-4518",
+      "temperature": "5°C",
+      "route": "Callao Hub → Miraflores Store",
+      "driver": "Ana R.",
+      "eta": "1:15 PM",
+      "status": "Delivered"
+    }
+  ],
+  "warehouses": [
+    {
+      "id": "WH-001",
+      "name": "Lima Central",
+      "location": "Lima",
+      "capacity": 2500
+    },
+    {
+      "id": "WH-002",
+      "name": "North Hub",
+      "location": "North Lima",
+      "capacity": 1800
+    },
+    {
+      "id": "WH-003",
+      "name": "South Hub",
+      "location": "South Lima",
+      "capacity": 1600
+    }
+  ],
+  "routes": [],
+  "dispatches": []
+}

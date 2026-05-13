@@ -226,7 +226,7 @@
 
         <tr *ngFor="let product of filteredProducts; let i = index">
 
-          <td>{{ product.id }}</td>
+          <td>{{ product.code }}</td>
 
           <td>
             <div class="product-name">
@@ -267,23 +267,34 @@
 
               <button
                 class="edit-btn"
-                (click)="openEditModal(product, i)">
-                <span class="material-symbols-outlined">
-                  edit_square
-                </span>
+                (click)="openEditModal(product)">
+
+      <span class="material-symbols-outlined">
+        edit_square
+      </span>
+
                 Edit
               </button>
 
               <button
                 class="min-stock-btn"
                 (click)="showToastMessage('Minimum stock checked')">
+
                 Min Stock
               </button>
 
               <button
                 class="view-btn"
                 (click)="showToastMessage(product.name + ' selected')">
+
                 View
+              </button>
+
+              <button
+                class="delete-btn"
+                (click)="deleteProduct(product)">
+
+                Delete
               </button>
 
             </div>
