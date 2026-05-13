@@ -1,0 +1,52 @@
+<div class="table-card">
+
+  <div class="table-header">
+
+    <div>
+      <h2>Inventory Status</h2>
+
+      <p>Current warehouse products</p>
+    </div>
+
+    <button>
+      View All
+    </button>
+
+  </div>
+
+  <table>
+
+    <thead>
+
+    <tr>
+      <th>Product</th>
+      <th>Category</th>
+      <th>Stock</th>
+      <th>Status</th>
+    </tr>
+
+    </thead>
+
+    <tbody>
+
+    <tr *ngFor="let product of products">
+
+      <td>{{ product.name }}</td>
+
+      <td>{{ product.category }}</td>
+
+      <td>{{ product.stock }}</td>
+
+      <td>
+          <span class="status">
+            {{ product.status }}
+          </span>
+      </td>
+
+    </tr>
+
+    </tbody>
+
+  </table>
+
+</div>

@@ -1,0 +1,430 @@
+<div class="inventory-page">
+
+  <div class="toast" [class.show]="showToast">
+    <span class="material-symbols-outlined">
+      check_circle
+    </span>
+    {{ toastMessage }}
+  </div>
+
+  <section class="page-header">
+
+    <div class="header-copy">
+      <h1>Inventory</h1>
+
+      <p>
+        Monitor stock levels, expiration dates, and storage
+        conditions across all warehouses.
+      </p>
+    </div>
+
+    <div class="header-actions">
+
+      <button class="outline-btn">
+        <span class="material-symbols-outlined">
+          delete
+        </span>
+        Register Waste
+      </button>
+
+      <button class="outline-btn blue-outline">
+        <span class="material-symbols-outlined">
+          stacks
+        </span>
+        Add Batch
+      </button>
+
+      <button class="outline-btn blue-outline">
+        <span class="material-symbols-outlined">
+          send
+        </span>
+        Create Dispatch
+      </button>
+
+      <button
+        class="primary-btn"
+        (click)="openAddModal()">
+
+        <span class="material-symbols-outlined">
+          add
+        </span>
+        Add Product
+      </button>
+
+    </div>
+
+  </section>
+
+  <section class="filters-row">
+
+    <select [(ngModel)]="selectedCategory">
+      <option>All categories</option>
+      <option>Fruits</option>
+      <option>Vegetables</option>
+      <option>Dairy</option>
+      <option>Frozen</option>
+      <option>Ready-to-ship</option>
+    </select>
+
+    <select [(ngModel)]="selectedWarehouse">
+      <option>All warehouses</option>
+      <option>Lima Central</option>
+      <option>North Hub</option>
+      <option>South Hub</option>
+    </select>
+
+    <button class="export-btn">
+      <span class="material-symbols-outlined">
+        download
+      </span>
+      Export
+    </button>
+
+  </section>
+
+  <section class="stats-grid">
+
+    <article class="stat-card">
+      <div class="stat-top">
+        <p>Total Inventory<br>Units</p>
+        <span class="material-symbols-outlined">
+          inventory_2
+        </span>
+      </div>
+
+      <h2>1,842</h2>
+      <small class="positive">+12% vs last month</small>
+    </article>
+
+    <article class="stat-card">
+      <div class="stat-top">
+        <p>Expiring Soon</p>
+        <span class="material-symbols-outlined">
+          error
+        </span>
+      </div>
+
+      <h2>542</h2>
+      <small class="warning">Within 3 days</small>
+    </article>
+
+    <article class="stat-card">
+      <div class="stat-top">
+        <p>Cold Storage Items</p>
+        <span class="material-symbols-outlined">
+          device_thermostat
+        </span>
+      </div>
+
+      <h2>1,450</h2>
+      <small>78.7% of total</small>
+    </article>
+
+    <article class="stat-card">
+      <div class="stat-top">
+        <p>Low Stock Items</p>
+        <span class="material-symbols-outlined">
+          trending_down
+        </span>
+      </div>
+
+      <h2>8</h2>
+      <small class="danger">Need reorder</small>
+    </article>
+
+  </section>
+
+  <section class="overview-grid">
+
+    <article class="panel-card stock-card">
+
+      <h2>Stock by Category</h2>
+
+      <div
+        class="stock-row"
+        *ngFor="let item of categoryStock">
+
+        <div class="stock-label">
+          <span>{{ item.name }}</span>
+          <strong>{{ item.units }} units ({{ item.percent }}%)</strong>
+        </div>
+
+        <div class="progress-track">
+          <div
+            class="progress-fill"
+            [ngClass]="item.className">
+          </div>
+        </div>
+
+      </div>
+
+    </article>
+
+    <article class="panel-card expiring-card">
+
+      <h2>Products Expiring Soon</h2>
+      <p>Items requiring immediate attention</p>
+
+      <div class="expiring-list">
+
+        <div
+          class="expiring-item"
+          *ngFor="let item of expiringItems">
+
+          <div>
+            <h3>{{ item.name }}</h3>
+            <span>Batch: {{ item.batch }}</span>
+            <span>Units: {{ item.units }} • {{ item.warehouse }}</span>
+          </div>
+
+          <strong>{{ item.date }}</strong>
+
+        </div>
+
+      </div>
+
+      <button class="view-all-btn">
+        View all expiring items
+      </button>
+
+    </article>
+
+  </section>
+
+  <section class="products-card">
+
+    <div class="products-header">
+
+      <h2>All Products</h2>
+
+      <select [(ngModel)]="selectedStatus">
+        <option>Filter by status</option>
+        <option>Good</option>
+        <option>Expiring Soon</option>
+        <option>Critical</option>
+        <option>Low Stock</option>
+      </select>
+
+    </div>
+
+    <div class="table-wrapper">
+
+      <table>
+
+        <thead>
+        <tr>
+          <th>Product<br>ID</th>
+          <th>Name</th>
+          <th>Category</th>
+          <th>Stock</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+        </thead>
+
+        <tbody>
+
+        <tr *ngFor="let product of filteredProducts; let i = index">
+
+          <td>{{ product.id }}</td>
+
+          <td>
+            <div class="product-name">
+              <strong>{{ product.name }}</strong>
+              <span>
+                {{ product.warehouse }} • Exp: {{ product.expiryDate }}
+              </span>
+            </div>
+          </td>
+
+          <td>{{ product.category }}</td>
+
+          <td>
+            <div class="stock-cell">
+              <strong>{{ product.stock }}</strong>
+              <span>units</span>
+              <small>{{ product.temperature }}</small>
+            </div>
+          </td>
+
+          <td>
+            <span
+              class="status-chip"
+              [ngClass]="{
+    'good': product.status === 'Good',
+    'expiring': product.status === 'Expiring Soon',
+    'critical': product.status === 'Critical',
+    'low-stock': product.status === 'Low Stock'
+  }">
+
+              {{ product.status }}
+
+            </span>
+          </td>
+
+          <td>
+            <div class="actions">
+
+              <button
+                class="edit-btn"
+                (click)="openEditModal(product, i)">
+                <span class="material-symbols-outlined">
+                  edit_square
+                </span>
+                Edit
+              </button>
+
+              <button
+                class="min-stock-btn"
+                (click)="showToastMessage('Minimum stock checked')">
+                Min Stock
+              </button>
+
+              <button
+                class="view-btn"
+                (click)="showToastMessage(product.name + ' selected')">
+                View
+              </button>
+
+            </div>
+          </td>
+
+        </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </section>
+
+  <div
+    class="modal-overlay"
+    *ngIf="isAddModalOpen">
+
+    <div class="modal">
+
+      <div class="modal-header">
+        <h2>{{ isEditing ? 'Edit Product' : 'Add Product' }}</h2>
+
+        <button (click)="closeAddModal()">
+          ✕
+        </button>
+      </div>
+
+      <div class="modal-body">
+
+        <div class="form-group">
+          <label>Product ID</label>
+          <input
+            type="text"
+            [(ngModel)]="newProduct.id"
+          />
+        </div>
+
+        <div class="form-group">
+          <label>Product Name</label>
+          <input
+            type="text"
+            [(ngModel)]="newProduct.name"
+          />
+        </div>
+
+        <div class="form-row">
+
+          <div class="form-group">
+            <label>Category</label>
+            <select [(ngModel)]="newProduct.category">
+              <option>Fruits</option>
+              <option>Vegetables</option>
+              <option>Dairy</option>
+              <option>Frozen</option>
+              <option>Ready-to-ship</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Warehouse</label>
+            <select [(ngModel)]="newProduct.warehouse">
+              <option>Lima Central</option>
+              <option>North Hub</option>
+              <option>South Hub</option>
+            </select>
+          </div>
+
+        </div>
+
+        <div class="form-row">
+
+          <div class="form-group">
+            <label>Stock</label>
+            <input
+              type="number"
+              [(ngModel)]="newProduct.stock"
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Min Stock</label>
+            <input
+              type="number"
+              [(ngModel)]="newProduct.minStock"
+            />
+          </div>
+
+        </div>
+
+        <div class="form-row">
+
+          <div class="form-group">
+            <label>Temperature</label>
+            <input
+              type="text"
+              placeholder="3°C"
+              [(ngModel)]="newProduct.temperature"
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Batch</label>
+            <input
+              type="text"
+              placeholder="BT-4501"
+              [(ngModel)]="newProduct.batch"
+            />
+          </div>
+
+        </div>
+
+        <div class="form-group">
+          <label>Expiration Date</label>
+          <input
+            type="date"
+            [(ngModel)]="newProduct.expiryDate"
+          />
+        </div>
+
+      </div>
+
+      <div class="modal-footer">
+
+        <button
+          class="secondary-btn"
+          (click)="closeAddModal()">
+          Cancel
+        </button>
+
+        <button
+          class="primary-btn"
+          (click)="saveProduct()">
+          {{ isEditing ? 'Update Product' : 'Save Product' }}
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
