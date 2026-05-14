@@ -916,3 +916,177 @@ td:nth-child(6) {
   box-shadow: 0 18px 40px rgba(15, 23, 42, 0.12);
   border-color: rgba(64, 86, 180, 0.22);
 }
+
+.header-actions button,
+.export-btn,
+.actions button,
+.modal-footer button {
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease,
+    background 0.2s ease;
+}
+
+.header-actions button:hover,
+.export-btn:hover,
+.actions button:hover,
+.modal-footer button:hover {
+  transform: translateY(-2px);
+}
+
+.outline-btn,
+.export-btn {
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.06);
+}
+
+.outline-btn:hover,
+.export-btn:hover {
+  box-shadow: 0 14px 28px rgba(15, 23, 42, 0.12);
+}
+
+.primary-btn {
+  box-shadow: 0 12px 24px rgba(64, 86, 180, 0.22);
+}
+
+.primary-btn:hover {
+  box-shadow: 0 16px 32px rgba(64, 86, 180, 0.32);
+}
+
+.stat-card,
+.panel-card,
+.products-card {
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  transition:
+    transform 0.22s ease,
+    box-shadow 0.22s ease,
+    border-color 0.22s ease;
+}
+
+.stat-card:hover,
+.panel-card:hover,
+.products-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 42px rgba(15, 23, 42, 0.12);
+  border-color: rgba(64, 86, 180, 0.22);
+}
+
+.status-chip {
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.status-chip:hover {
+  transform: scale(1.04);
+}
+
+.table-wrapper tbody tr {
+  transition:
+    background 0.18s ease,
+    transform 0.18s ease;
+}
+
+.table-wrapper tbody tr:hover {
+  background: #f8fafc;
+}
+
+.progress-fill {
+  transition:
+    width 0.65s ease,
+    transform 0.2s ease,
+    filter 0.2s ease;
+}
+
+.stock-row:hover .progress-fill {
+  transform: scaleY(1.18);
+  filter: brightness(1.05);
+}
+
+.modal {
+  animation: modalFadeIn 0.22s ease;
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+.expiring-item {
+  transition:
+    transform 0.22s ease,
+    box-shadow 0.22s ease,
+    border-color 0.22s ease,
+    background 0.22s ease;
+}
+
+.expiring-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 36px rgba(15, 23, 42, 0.12);
+  border-color: rgba(255, 145, 0, 0.35);
+  background: #fffaf3;
+}
+
+.expiring-item:hover .expiry-badge {
+  transform: scale(1.06);
+}
+
+.expiry-badge {
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+.modal-expiring-list {
+  margin-top: 24px;
+  max-height: 430px;
+  overflow-y: auto;
+  padding-right: 6px;
+}
+
+.details-modal {
+  max-height: 88vh;
+  overflow: hidden;
+}
+
+.modal-expiring-list {
+  margin-top: 24px;
+  max-height: 520px;
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+.modal-expiring-list .expiring-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  min-height: 120px;
+  padding: 22px;
+}
+
+.modal-expiring-list .expiring-content h3 {
+  margin: 0 0 18px;
+}
+
+.modal-expiring-list .expiring-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.modal-expiring-list .expiring-status {
+  margin-top: 4px;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.modal-expiring-list .expiring-item strong {
+  flex-shrink: 0;
+  align-self: center;
+}
