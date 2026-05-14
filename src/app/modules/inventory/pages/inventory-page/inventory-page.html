@@ -20,17 +20,23 @@
 
     <div class="header-actions">
 
-      <button class="outline-btn">
+      <button
+        class="outline-btn"
+        (click)="openWasteModal()">
         <span class="material-symbols-outlined">
-          delete
+        delete
         </span>
         Register Waste
       </button>
 
-      <button class="outline-btn blue-outline">
-        <span class="material-symbols-outlined">
-          stacks
-        </span>
+      <button
+        class="outline-btn blue-outline"
+        (click)="openBatchModal()">
+
+  <span class="material-symbols-outlined">
+    stacks
+  </span>
+
         Add Batch
       </button>
 
@@ -73,7 +79,9 @@
       <option>South Hub</option>
     </select>
 
-    <button class="export-btn">
+    <button
+      class="export-btn"
+      (click)="exportProducts()">
       <span class="material-symbols-outlined">
         download
       </span>
@@ -92,7 +100,7 @@
         </span>
       </div>
 
-      <h2>1,842</h2>
+      <h2>{{ totalInventoryUnits }}</h2>
       <small class="positive">+12% vs last month</small>
     </article>
 
@@ -104,7 +112,7 @@
         </span>
       </div>
 
-      <h2>542</h2>
+      <h2>{{ expiringSoonCount }}</h2>
       <small class="warning">Within 3 days</small>
     </article>
 
@@ -116,8 +124,8 @@
         </span>
       </div>
 
-      <h2>1,450</h2>
-      <small>78.7% of total</small>
+      <h2>{{ coldStorageItems }}</h2>
+      <small>{{ coldStoragePercent }} of total</small>
     </article>
 
     <article class="stat-card">
@@ -128,7 +136,7 @@
         </span>
       </div>
 
-      <h2>8</h2>
+      <h2>{{ lowStockItems }}</h2>
       <small class="danger">Need reorder</small>
     </article>
 
@@ -142,7 +150,7 @@
 
       <div
         class="stock-row"
-        *ngFor="let item of categoryStock">
+        *ngFor="let item of categoryStockSummary">
 
         <div class="stock-label">
           <span>{{ item.name }}</span>
@@ -152,7 +160,8 @@
         <div class="progress-track">
           <div
             class="progress-fill"
-            [ngClass]="item.className">
+            [ngClass]="item.className"
+            [style.width.%]="item.percent">
           </div>
         </div>
 
@@ -169,7 +178,7 @@
 
         <div
           class="expiring-item"
-          *ngFor="let item of expiringItems">
+          *ngFor="let item of expiringProducts">
 
           <div>
             <h3>{{ item.name }}</h3>
@@ -278,21 +287,21 @@
 
               <button
                 class="min-stock-btn"
-                (click)="showToastMessage('Minimum stock checked')">
+                (click)="openMinStockModal(product)">
 
                 Min Stock
               </button>
 
               <button
                 class="view-btn"
-                (click)="showToastMessage(product.name + ' selected')">
+                (click)="openViewModal(product)">
 
                 View
               </button>
 
               <button
                 class="delete-btn"
-                (click)="deleteProduct(product)">
+                (click)="openDeleteModal(product)">
 
                 Delete
               </button>
@@ -330,7 +339,8 @@
           <label>Product ID</label>
           <input
             type="text"
-            [(ngModel)]="newProduct.id"
+            [(ngModel)]="newProduct.code"
+            readonly
           />
         </div>
 
@@ -389,10 +399,10 @@
         <div class="form-row">
 
           <div class="form-group">
-            <label>Temperature</label>
+            <label>Temperature (°C)</label>
             <input
-              type="text"
-              placeholder="3°C"
+              type="number"
+              placeholder="3"
               [(ngModel)]="newProduct.temperature"
             />
           </div>
@@ -401,7 +411,7 @@
             <label>Batch</label>
             <input
               type="text"
-              placeholder="BT-4501"
+              placeholder="Auto generated"
               [(ngModel)]="newProduct.batch"
             />
           </div>
@@ -437,5 +447,371 @@
     </div>
 
   </div>
+  <div
+    class="modal-overlay"
+    *ngIf="isViewModalOpen && selectedProduct">
 
+    <div class="modal details-modal">
+
+      <div class="modal-header">
+        <div>
+          <h2>{{ selectedProduct.name }}</h2>
+          <p>{{ selectedProduct.code }} • {{ selectedProduct.category }}</p>
+        </div>
+
+        <button (click)="closeViewModal()">
+          ✕
+        </button>
+      </div>
+
+      <div class="detail-grid">
+
+        <div class="detail-item">
+          <span>Warehouse</span>
+          <strong>{{ selectedProduct.warehouse }}</strong>
+        </div>
+
+        <div class="detail-item">
+          <span>Batch</span>
+          <strong>{{ selectedProduct.batch }}</strong>
+        </div>
+
+        <div class="detail-item">
+          <span>Stock</span>
+          <strong>{{ selectedProduct.stock }} units</strong>
+        </div>
+
+        <div class="detail-item">
+          <span>Minimum Stock</span>
+          <strong>{{ selectedProduct.minStock }} units</strong>
+        </div>
+
+        <div class="detail-item">
+          <span>Temperature</span>
+          <strong>{{ selectedProduct.temperature }}</strong>
+        </div>
+
+        <div class="detail-item">
+          <span>Expiration Date</span>
+          <strong>{{ selectedProduct.expiryDate }}</strong>
+        </div>
+
+        <div class="detail-item">
+          <span>Status</span>
+          <strong>{{ selectedProduct.status }}</strong>
+        </div>
+
+      </div>
+
+      <div class="modal-footer">
+        <button
+          class="secondary-btn"
+          (click)="closeViewModal()">
+          Close
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div
+
+    class="modal-overlay"
+    *ngIf="isDeleteModalOpen && productToDelete">
+
+    <div class="modal confirm-modal">
+
+      <div class="modal-header">
+        <h2>Delete Product</h2>
+
+        <button (click)="closeDeleteModal()">
+          ✕
+        </button>
+      </div>
+
+      <p class="confirm-text">
+        Are you sure you want to delete
+        <strong>{{ productToDelete.name }}</strong>?
+        This action cannot be undone.
+      </p>
+
+      <div class="modal-footer">
+        <button
+          class="secondary-btn"
+          (click)="closeDeleteModal()">
+          Cancel
+        </button>
+
+        <button
+          class="delete-confirm-btn"
+          (click)="confirmDeleteProduct()">
+          Delete Product
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+  <div
+    class="modal-overlay"
+    *ngIf="isMinStockModalOpen && productToUpdateMinStock">
+
+    <div class="modal confirm-modal">
+
+      <div class="modal-header">
+        <div>
+          <h2>Update Minimum Stock</h2>
+          <p>{{ productToUpdateMinStock.name }} • {{ productToUpdateMinStock.code }}</p>
+        </div>
+
+        <button (click)="closeMinStockModal()">
+          ✕
+        </button>
+      </div>
+
+      <div class="form-group">
+        <label>Current Stock</label>
+        <input
+          type="number"
+          [value]="productToUpdateMinStock.stock"
+          readonly
+        />
+      </div>
+
+      <div class="form-group">
+        <label>Minimum Stock</label>
+        <input
+          type="number"
+          [(ngModel)]="newMinStockValue"
+        />
+      </div>
+
+      <div class="modal-footer">
+        <button
+          class="secondary-btn"
+          (click)="closeMinStockModal()">
+          Cancel
+        </button>
+
+        <button
+          class="primary-btn"
+          (click)="saveMinStock()">
+          Save Min Stock
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+  <div
+    class="modal-overlay"
+    *ngIf="isWasteModalOpen">
+
+    <div class="modal confirm-modal">
+
+      <div class="modal-header">
+        <div>
+          <h2>Register Waste</h2>
+          <p>Record damaged, expired, or rejected inventory units.</p>
+        </div>
+
+        <button (click)="closeWasteModal()">
+          ✕
+        </button>
+      </div>
+
+      <div class="form-group">
+        <label>Product</label>
+        <select [(ngModel)]="wasteForm.productId">
+          <option
+            *ngFor="let product of products"
+            [ngValue]="product.id">
+            {{ product.code }} - {{ product.name }} ({{ product.stock }} units)
+          </option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Units Lost</label>
+        <input
+          type="number"
+          min="1"
+          [(ngModel)]="wasteForm.units"
+        />
+      </div>
+
+      <div class="form-group">
+        <label>Reason</label>
+        <select [(ngModel)]="wasteForm.reason">
+          <option>Expired</option>
+          <option>Damaged</option>
+          <option>Temperature issue</option>
+          <option>Quality rejection</option>
+          <option>Other</option>
+        </select>
+      </div>
+
+      <div class="modal-footer">
+        <button
+          class="secondary-btn"
+          (click)="closeWasteModal()">
+          Cancel
+        </button>
+
+        <button
+          class="primary-btn"
+          (click)="registerWaste()">
+          Save Waste
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+  <div
+    class="modal-overlay"
+    *ngIf="isWasteModalOpen">
+
+    <div class="modal confirm-modal">
+
+      <div class="modal-header">
+        <div>
+          <h2>Register Waste</h2>
+          <p>
+            Record damaged, expired, or rejected inventory units.
+          </p>
+        </div>
+
+        <button (click)="closeWasteModal()">
+          ✕
+        </button>
+      </div>
+
+      <div class="form-group">
+        <label>Product</label>
+
+        <select [(ngModel)]="wasteForm.productId">
+
+          <option
+            *ngFor="let product of products"
+            [ngValue]="product.id">
+
+            {{ product.code }} - {{ product.name }}
+            ({{ product.stock }} units)
+
+          </option>
+
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Units Lost</label>
+
+        <input
+          type="number"
+          min="1"
+          [(ngModel)]="wasteForm.units"
+        />
+      </div>
+
+      <div class="form-group">
+        <label>Reason</label>
+
+        <select [(ngModel)]="wasteForm.reason">
+          <option>Expired</option>
+          <option>Damaged</option>
+          <option>Temperature issue</option>
+          <option>Quality rejection</option>
+          <option>Other</option>
+        </select>
+      </div>
+
+      <div class="modal-footer">
+
+        <button
+          class="secondary-btn"
+          (click)="closeWasteModal()">
+
+          Cancel
+        </button>
+
+        <button
+          class="primary-btn"
+          (click)="registerWaste()">
+
+          Save Waste
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+  <div
+    class="modal-overlay"
+    *ngIf="isBatchModalOpen">
+
+    <div class="modal confirm-modal">
+
+      <div class="modal-header">
+        <div>
+          <h2>Add Batch</h2>
+          <p>
+            Register new inventory units for an existing product.
+          </p>
+        </div>
+
+        <button (click)="closeBatchModal()">
+          ✕
+        </button>
+      </div>
+
+      <div class="form-group">
+        <label>Product</label>
+
+        <select [(ngModel)]="batchForm.productId">
+
+          <option
+            *ngFor="let product of products"
+            [ngValue]="product.id">
+
+            {{ product.code }} - {{ product.name }}
+
+          </option>
+
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Units Added</label>
+
+        <input
+          type="number"
+          min="1"
+          [(ngModel)]="batchForm.units"
+        />
+      </div>
+
+      <div class="modal-footer">
+
+        <button
+          class="secondary-btn"
+          (click)="closeBatchModal()">
+
+          Cancel
+        </button>
+
+        <button
+          class="primary-btn"
+          (click)="saveBatch()">
+
+          Save Batch
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
 </div>

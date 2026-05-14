@@ -3,15 +3,15 @@
     {
       "id": 1,
       "code": "PRD-001",
-      "name": "Fresh Strawberries",
+      "name": "Fresh Berries",
       "warehouse": "Lima Central",
-      "expiryDate": "2026-04-28",
+      "expiryDate": "2026-04-24",
       "category": "Fruits",
-      "stock": 450,
+      "stock": 300,
       "temperature": "3°C",
-      "status": "Good",
-      "batch": "BT-4501",
-      "minStock": 80
+      "batch": "BT-4506",
+      "minStock": 30,
+      "status": "Expiring Soon"
     },
     {
       "id": 2,
@@ -20,7 +20,7 @@
       "warehouse": "North Hub",
       "expiryDate": "2026-04-25",
       "category": "Vegetables",
-      "stock": 320,
+      "stock": 220,
       "temperature": "5°C",
       "status": "Expiring Soon",
       "batch": "BT-4518",
@@ -33,10 +33,10 @@
       "warehouse": "Lima Central",
       "expiryDate": "2026-04-24",
       "category": "Dairy",
-      "stock": 180,
-      "temperature": "4°C",
-      "status": "Critical",
-      "batch": "BT-4521",
+      "stock": 138,
+      "temperature": "5°C",
+      "status": "Expiring Soon",
+      "batch": "BT-4506",
       "minStock": 40
     },
     {
@@ -46,11 +46,11 @@
       "warehouse": "South Hub",
       "expiryDate": "2026-06-15",
       "category": "Frozen",
-      "stock": 560,
+      "stock": 470,
       "temperature": "-18°C",
-      "status": "Good",
-      "batch": "BT-4498",
-      "minStock": 120
+      "batch": "BT-4506",
+      "minStock": 120,
+      "status": "Good"
     },
     {
       "id": 5,
