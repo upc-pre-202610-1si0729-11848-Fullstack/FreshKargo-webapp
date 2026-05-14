@@ -50,6 +50,12 @@ export class InventoryPage implements OnInit {
   newMinStockValue = 0;
 
   isWasteModalOpen = false;
+  isBatchModalOpen = false;
+
+  batchForm = {
+    productId: 0,
+    units: 0,
+  };
 
   wasteForm = {
     productId: 0,
@@ -400,7 +406,64 @@ export class InventoryPage implements OnInit {
       },
     });
   }
+  openBatchModal(): void {
+    this.batchForm = {
+      productId: this.products.length > 0 ? this.products[0].id : 0,
+      units: 0,
+    };
 
+    this.isBatchModalOpen = true;
+  }
+
+  closeBatchModal(): void {
+    this.isBatchModalOpen = false;
+
+    this.batchForm = {
+      productId: 0,
+      units: 0,
+    };
+  }
+
+  saveBatch(): void {
+    const selectedProduct = this.products.find(
+      (product) => product.id === Number(this.batchForm.productId),
+    );
+
+    if (!selectedProduct || this.batchForm.units <= 0) {
+      this.showToastMessage('Please complete the batch form');
+      return;
+    }
+
+    const newStock = selectedProduct.stock + Number(this.batchForm.units);
+
+    let calculatedStatus = this.inventoryService.getProductStatus(
+      newStock,
+      selectedProduct.expiryDate,
+    );
+
+    if (newStock <= selectedProduct.minStock) {
+      calculatedStatus = 'Low Stock';
+    }
+
+    const updatedProduct: InventoryProduct = {
+      ...selectedProduct,
+      stock: newStock,
+      temperature: selectedProduct.temperature,
+      batch: this.generateBatchCode(),
+      status: calculatedStatus,
+    };
+
+    this.inventoryService.updateProduct(updatedProduct.id, updatedProduct).subscribe({
+      next: () => {
+        this.loadProducts();
+        this.closeBatchModal();
+        this.showToastMessage('Batch added successfully');
+      },
+      error: () => {
+        this.showToastMessage('Error adding batch');
+      },
+    });
+  }
   showToastMessage(message: string): void {
     this.toastMessage = message;
     this.showToast = true;

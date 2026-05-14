@@ -29,10 +29,14 @@
         Register Waste
       </button>
 
-      <button class="outline-btn blue-outline">
-        <span class="material-symbols-outlined">
-          stacks
-        </span>
+      <button
+        class="outline-btn blue-outline"
+        (click)="openBatchModal()">
+
+  <span class="material-symbols-outlined">
+    stacks
+  </span>
+
         Add Batch
       </button>
 
@@ -735,6 +739,72 @@
           (click)="registerWaste()">
 
           Save Waste
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+  <div
+    class="modal-overlay"
+    *ngIf="isBatchModalOpen">
+
+    <div class="modal confirm-modal">
+
+      <div class="modal-header">
+        <div>
+          <h2>Add Batch</h2>
+          <p>
+            Register new inventory units for an existing product.
+          </p>
+        </div>
+
+        <button (click)="closeBatchModal()">
+          ✕
+        </button>
+      </div>
+
+      <div class="form-group">
+        <label>Product</label>
+
+        <select [(ngModel)]="batchForm.productId">
+
+          <option
+            *ngFor="let product of products"
+            [ngValue]="product.id">
+
+            {{ product.code }} - {{ product.name }}
+
+          </option>
+
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Units Added</label>
+
+        <input
+          type="number"
+          min="1"
+          [(ngModel)]="batchForm.units"
+        />
+      </div>
+
+      <div class="modal-footer">
+
+        <button
+          class="secondary-btn"
+          (click)="closeBatchModal()">
+
+          Cancel
+        </button>
+
+        <button
+          class="primary-btn"
+          (click)="saveBatch()">
+
+          Save Batch
         </button>
 
       </div>
