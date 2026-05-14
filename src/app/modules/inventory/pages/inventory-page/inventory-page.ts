@@ -464,6 +464,52 @@ export class InventoryPage implements OnInit {
       },
     });
   }
+  exportProducts(): void {
+    const headers = [
+      'Product ID',
+      'Name',
+      'Category',
+      'Warehouse',
+      'Stock',
+      'Temperature',
+      'Batch',
+      'Min Stock',
+      'Status',
+      'Expiration Date',
+    ];
+
+    const rows = this.products.map((product) => [
+      product.code,
+      product.name,
+      product.category,
+      product.warehouse,
+      product.stock,
+      product.temperature,
+      product.batch,
+      product.minStock,
+      product.status,
+      product.expiryDate,
+    ]);
+
+    const csvContent = [headers.join(';'), ...rows.map((row) => row.join(';'))].join('\n');
+
+    const blob = new Blob(['\uFEFF' + csvContent], { type: 'text/csv;charset=utf-8;' });
+
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+
+    link.href = url;
+    link.setAttribute('download', 'inventory-report.csv');
+
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    window.URL.revokeObjectURL(url);
+
+    this.showToastMessage('Inventory CSV exported successfully');
+  }
+
   showToastMessage(message: string): void {
     this.toastMessage = message;
     this.showToast = true;
