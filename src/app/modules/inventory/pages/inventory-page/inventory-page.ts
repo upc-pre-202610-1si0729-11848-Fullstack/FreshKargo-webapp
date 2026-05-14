@@ -41,6 +41,7 @@ export class InventoryPage implements OnInit {
   editingProductId: number | null = null;
   isViewModalOpen = false;
   isDeleteModalOpen = false;
+  isExpiringModalOpen = false;
 
   selectedProduct: InventoryProduct | null = null;
   productToDelete: InventoryProduct | null = null;
@@ -166,6 +167,18 @@ export class InventoryPage implements OnInit {
         date: this.formatExpiryDate(product.expiryDate),
       }));
   }
+  get allExpiringProducts() {
+    return this.products
+      .filter((product) => product.status === 'Expiring Soon' || product.status === 'Critical')
+      .map((product) => ({
+        name: product.name,
+        batch: product.batch,
+        units: product.stock,
+        warehouse: product.warehouse,
+        status: product.status,
+        date: this.formatExpiryDate(product.expiryDate),
+      }));
+  }
 
   ngOnInit(): void {
     this.loadProducts();
@@ -273,6 +286,13 @@ export class InventoryPage implements OnInit {
   closeViewModal(): void {
     this.selectedProduct = null;
     this.isViewModalOpen = false;
+  }
+  openExpiringModal(): void {
+    this.isExpiringModalOpen = true;
+  }
+
+  closeExpiringModal(): void {
+    this.isExpiringModalOpen = false;
   }
 
   openDeleteModal(product: InventoryProduct): void {

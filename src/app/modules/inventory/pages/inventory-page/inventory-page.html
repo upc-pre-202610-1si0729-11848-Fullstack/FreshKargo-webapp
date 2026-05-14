@@ -192,7 +192,9 @@
 
       </div>
 
-      <button class="view-all-btn">
+      <button
+        class="view-all-btn"
+        (click)="openExpiringModal()">
         View all expiring items
       </button>
 
@@ -809,6 +811,59 @@
           Save Batch
         </button>
 
+      </div>
+
+    </div>
+
+  </div>
+  <div
+    class="modal-overlay"
+    *ngIf="isExpiringModalOpen">
+
+    <div class="modal details-modal">
+
+      <div class="modal-header">
+        <div>
+          <h2>All Expiring Items</h2>
+          <p>Products requiring immediate attention.</p>
+        </div>
+
+        <button (click)="closeExpiringModal()">
+          ✕
+        </button>
+      </div>
+
+      <div class="expiring-list modal-expiring-list">
+
+        <div
+          class="expiring-item"
+          *ngFor="let item of allExpiringProducts">
+
+          <div class="expiring-content">
+            <h3>{{ item.name }}</h3>
+            <div class="expiring-meta">
+              <span>Batch: {{ item.batch }}</span>
+              <span>
+      {{ item.units }} units • {{ item.warehouse }}
+    </span>
+              <span class="expiring-status">
+      {{ item.status }}
+    </span>
+            </div>
+          </div>
+
+          <strong>{{ item.date }}</strong>
+
+        </div>
+
+      </div>
+
+      <div class="modal-footer">
+        <button
+          class="secondary-btn"
+          (click)="closeExpiringModal()">
+          Close
+        </button>
       </div>
 
     </div>
