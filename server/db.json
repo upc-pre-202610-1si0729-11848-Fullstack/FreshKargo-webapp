@@ -8,7 +8,7 @@
       "expiryDate": "2026-04-24",
       "category": "Fruits",
       "stock": 300,
-      "temperature": "3°C",
+      "temperature": "3C",
       "batch": "BT-4506",
       "minStock": 30,
       "status": "Expiring Soon"
@@ -21,7 +21,7 @@
       "expiryDate": "2026-04-25",
       "category": "Vegetables",
       "stock": 220,
-      "temperature": "5°C",
+      "temperature": "5C",
       "status": "Expiring Soon",
       "batch": "BT-4518",
       "minStock": 60
@@ -34,7 +34,7 @@
       "expiryDate": "2026-04-24",
       "category": "Dairy",
       "stock": 138,
-      "temperature": "5°C",
+      "temperature": "5C",
       "status": "Expiring Soon",
       "batch": "BT-4506",
       "minStock": 40
@@ -47,7 +47,7 @@
       "expiryDate": "2026-06-15",
       "category": "Frozen",
       "stock": 470,
-      "temperature": "-18°C",
+      "temperature": "-18C",
       "batch": "BT-4506",
       "minStock": 120,
       "status": "Good"
@@ -60,7 +60,7 @@
       "expiryDate": "2026-04-26",
       "category": "Fruits",
       "stock": 42,
-      "temperature": "6°C",
+      "temperature": "6C",
       "status": "Low Stock",
       "batch": "BT-4503",
       "minStock": 50
@@ -69,23 +69,133 @@
   "shipments": [
     {
       "id": "FK-1023",
-      "product": "Berries",
+      "product": "Fresh Berries",
       "batch": "BT-4521",
-      "temperature": "3°C",
-      "route": "Lima Central → Surco Market",
+      "temperature": "3C",
+      "route": "Lima Central -> Surco Market",
       "driver": "Carlos M.",
       "eta": "12:30 PM",
       "status": "In Transit"
     },
     {
       "id": "FK-1024",
-      "product": "Lettuce",
+      "product": "Organic Lettuce",
       "batch": "BT-4518",
-      "temperature": "5°C",
-      "route": "Callao Hub → Miraflores Store",
+      "temperature": "5C",
+      "route": "Callao Hub -> Miraflores Store",
       "driver": "Ana R.",
       "eta": "1:15 PM",
       "status": "Delivered"
+    },
+    {
+      "id": "FK-1025",
+      "product": "Dairy Products",
+      "batch": "BT-4503",
+      "temperature": "6C",
+      "route": "Lima Central -> San Isidro",
+      "driver": "Luis P.",
+      "eta": "2:40 PM",
+      "status": "Delayed"
+    },
+    {
+      "id": "FK-1026",
+      "product": "Frozen Chicken",
+      "batch": "BT-4490",
+      "temperature": "-18C",
+      "route": "South Hub -> Barranco Store",
+      "driver": "Maria G.",
+      "eta": "3:00 PM",
+      "status": "In Transit"
+    },
+    {
+      "id": "FK-1027",
+      "product": "Fresh Avocados",
+      "batch": "BT-4476",
+      "temperature": "6C",
+      "route": "North Hub -> Lima Downtown",
+      "driver": "Pedro S.",
+      "eta": "3:45 PM",
+      "status": "Loading"
+    },
+    {
+      "id": "FK-1028",
+      "product": "Tomatoes",
+      "batch": "BT-4465",
+      "temperature": "8C",
+      "route": "South Hub -> Callao Market",
+      "driver": "Sofia L.",
+      "eta": "4:20 PM",
+      "status": "Rejected"
+    },
+    {
+      "id": "FK-1029",
+      "product": "Fresh Milk",
+      "batch": "BT-4522",
+      "temperature": "4C",
+      "route": "Lima Central -> San Borja",
+      "driver": "Diego F.",
+      "eta": "10:40 AM",
+      "status": "Delivered"
+    },
+    {
+      "id": "FK-1030",
+      "product": "Strawberries",
+      "batch": "BT-4528",
+      "temperature": "3C",
+      "route": "Lima Central -> Magdalena",
+      "driver": "Valeria T.",
+      "eta": "11:25 AM",
+      "status": "In Transit"
+    },
+    {
+      "id": "FK-1031",
+      "product": "Yogurt Packs",
+      "batch": "BT-4530",
+      "temperature": "4C",
+      "route": "Callao Hub -> Pueblo Libre",
+      "driver": "Raul N.",
+      "eta": "2:10 PM",
+      "status": "Delayed"
+    },
+    {
+      "id": "FK-1032",
+      "product": "Frozen Fish",
+      "batch": "BT-4534",
+      "temperature": "-16C",
+      "route": "South Hub -> Chorrillos",
+      "driver": "Andrea C.",
+      "eta": "5:10 PM",
+      "status": "Loading"
+    },
+    {
+      "id": "FK-1033",
+      "product": "Spinach",
+      "batch": "BT-4536",
+      "temperature": "5C",
+      "route": "North Hub -> San Miguel",
+      "driver": "Miguel A.",
+      "eta": "6:05 PM",
+      "status": "Delivered"
+    },
+    {
+      "id": "FK-1034",
+      "product": "Cheese Boxes",
+      "batch": "BT-4538",
+      "temperature": "4C",
+      "route": "Lima Central -> La Molina",
+      "driver": "Lucia P.",
+      "eta": "6:40 PM",
+      "status": "In Transit"
+    },
+    {
+      "id": "FK-1035",
+      "product": "Mango Crates",
+      "batch": "BT-4540",
+      "temperature": "7C",
+      "route": "South Hub -> Villa El Salvador",
+      "driver": "Jorge H.",
+      "eta": "7:20 PM",
+      "status": "Delayed"
     }
   ],
   "warehouses": [
@@ -108,6 +218,56 @@
       "capacity": 1600
     }
   ],
-  "routes": [],
-  "dispatches": []
+  "routes": [
+    {
+      "id": "RT-001",
+      "name": "Lima Central to Surco Market",
+      "type": "Cold chain",
+      "origin": "Lima Central",
+      "destination": "Surco Market",
+      "duration": "45 min",
+      "distance": "18 km"
+    },
+    {
+      "id": "RT-002",
+      "name": "Callao Hub to Miraflores Store",
+      "type": "Urban delivery",
+      "origin": "Callao Hub",
+      "destination": "Miraflores Store",
+      "duration": "55 min",
+      "distance": "22 km"
+    },
+    {
+      "id": "RT-003",
+      "name": "South Hub to Barranco Store",
+      "type": "Frozen delivery",
+      "origin": "South Hub",
+      "destination": "Barranco Store",
+      "duration": "50 min",
+      "distance": "20 km"
+    }
+  ],
+  "dispatches": [
+    {
+      "id": "DP-001",
+      "shipmentId": "FK-1023",
+      "vehicle": "TRK-014",
+      "driver": "Carlos M.",
+      "departureTime": "10:45 AM"
+    },
+    {
+      "id": "DP-002",
+      "shipmentId": "FK-1030",
+      "vehicle": "TRK-018",
+      "driver": "Valeria T.",
+      "departureTime": "9:30 AM"
+    },
+    {
+      "id": "DP-003",
+      "shipmentId": "FK-1034",
+      "vehicle": "TRK-021",
+      "driver": "Lucia P.",
+      "departureTime": "4:50 PM"
+    }
+  ]
 }
