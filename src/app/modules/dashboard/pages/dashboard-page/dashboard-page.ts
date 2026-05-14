@@ -181,10 +181,27 @@ export class DashboardPage implements OnInit {
       ).length;
 
       const risk = riskyProducts >= 2 ? 'Medium' : 'Low';
+      const warehouseShipments = this.shipments.filter((shipment) =>
+        shipment.route.includes(warehouse.name),
+      );
+
+      const deliveredShipments = warehouseShipments.filter(
+        (shipment) => shipment.status === 'Delivered',
+      ).length;
+
+      const delayedShipments = warehouseShipments.filter(
+        (shipment) => shipment.status === 'Delayed',
+      ).length;
+
+      const totalShipments = warehouseShipments.length;
+
+      const onTimeRate = totalShipments === 0 ? 100 : (deliveredShipments / totalShipments) * 100;
+
+      const adjustedOnTime = Math.max(70, onTimeRate - delayedShipments * 5);
 
       return {
         name: warehouse.name,
-        onTime: risk === 'Medium' ? 91 : 96,
+        onTime: Number(adjustedOnTime.toFixed(0)),
         avgTemp: `${avgTemperature.toFixed(0)}°C`,
         risk,
         statusClass: risk === 'Medium' ? 'yellow-status' : 'green-status',
