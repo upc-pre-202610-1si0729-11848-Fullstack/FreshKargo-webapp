@@ -37,6 +37,14 @@ export class DashboardPage implements OnInit {
     statusClass: string;
   }[] = [];
 
+  operationalAlerts: {
+    title: string;
+    description: string;
+    detail: string;
+    severity: string;
+    className: string;
+  }[] = [];
+
   inventoryHealth = '0%';
   activeShipments = '0';
   coldChainCompliance = '0%';
@@ -92,6 +100,7 @@ export class DashboardPage implements OnInit {
     this.inventoryHealth = `${healthPercent.toFixed(1)}%`;
     this.buildCategorySummary();
     this.buildWarehousePerformance();
+    this.buildOperationalAlerts();
 
     this.activeShipments = this.shipments
       .filter((shipment) => shipment.status !== 'Delivered')
@@ -182,7 +191,42 @@ export class DashboardPage implements OnInit {
       };
     });
   }
+  private buildOperationalAlerts(): void {
+    const temperatureAlerts = this.products
+      .filter((product) => this.getTemperatureValue(product.temperature) > 6)
+      .slice(0, 1)
+      .map((product) => ({
+        title: 'Temperature deviation detected',
+        description: `Product: ${product.name}`,
+        detail: `Warehouse: ${product.warehouse} • ${product.temperature}`,
+        severity: 'High',
+        className: 'high',
+      }));
 
+    const delayedShipmentAlerts = this.shipments
+      .filter((shipment) => shipment.status === 'Delayed')
+      .slice(0, 1)
+      .map((shipment) => ({
+        title: 'Delayed shipment',
+        description: `Route: ${shipment.route}`,
+        detail: `ETA: ${shipment.eta}`,
+        severity: 'Medium',
+        className: 'medium',
+      }));
+
+    const lowStockAlerts = this.products
+      .filter((product) => product.status === 'Low Stock' || product.stock <= product.minStock)
+      .slice(0, 1)
+      .map((product) => ({
+        title: 'Low stock warning',
+        description: `Product: ${product.name}`,
+        detail: `Available units: ${product.stock}`,
+        severity: 'Attention',
+        className: 'attention',
+      }));
+
+    this.operationalAlerts = [...temperatureAlerts, ...delayedShipmentAlerts, ...lowStockAlerts];
+  }
   private buildOperationsChart(): void {
     const delivered = this.shipments.filter((shipment) => shipment.status === 'Delivered').length;
 

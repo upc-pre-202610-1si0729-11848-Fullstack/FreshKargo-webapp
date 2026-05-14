@@ -141,37 +141,42 @@
 
       <div class="alerts-container">
 
-        <div class="alert-box">
+        <div
+          class="alert-box"
+          *ngFor="let alert of operationalAlerts">
+
           <div>
-            <h4>Temperature deviation detected</h4>
-            <p>Batch: FK-2841</p>
-            <p>Location: Warehouse North</p>
+            <h4>{{ alert.title }}</h4>
+            <p>{{ alert.description }}</p>
+            <p>{{ alert.detail }}</p>
           </div>
 
-          <span class="alert-tag high">High</span>
+          <span
+            class="alert-tag"
+            [ngClass]="alert.className">
+      {{ alert.severity }}
+    </span>
+
         </div>
 
-        <div class="alert-box">
+        <div
+          class="alert-box"
+          *ngIf="operationalAlerts.length === 0">
+
           <div>
-            <h4>Delayed shipment</h4>
-            <p>Route: Lima → Callao</p>
-            <p>ETA delayed by 2h</p>
+            <h4>No operational alerts</h4>
+            <p>All inventory and shipments are currently stable.</p>
+            <p>No immediate action required.</p>
           </div>
 
-          <span class="alert-tag medium">Medium</span>
-        </div>
+          <span class="alert-tag low">
+      Good
+    </span>
 
-        <div class="alert-box">
-          <div>
-            <h4>Low stock warning</h4>
-            <p>Product: Fresh avocados</p>
-            <p>Available units: 42</p>
-          </div>
-
-          <span class="alert-tag attention">Attention</span>
         </div>
 
       </div>
+
 
       <button class="view-alerts-btn">
         View all alerts

@@ -59,11 +59,11 @@
       "warehouse": "Lima Central",
       "expiryDate": "2026-04-26",
       "category": "Fruits",
-      "stock": 42,
-      "temperature": "6C",
-      "status": "Low Stock",
+      "stock": 70,
+      "temperature": "6°C",
       "batch": "BT-4503",
-      "minStock": 50
+      "minStock": 10,
+      "status": "Expiring Soon"
     }
   ],
   "shipments": [
