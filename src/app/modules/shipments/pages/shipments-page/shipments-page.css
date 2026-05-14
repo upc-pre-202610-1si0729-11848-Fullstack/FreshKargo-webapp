@@ -60,7 +60,8 @@
 }
 
 .outline-btn,
-.filter-btn {
+.filter-btn,
+.filter-control {
   min-height: 42px;
   padding: 0 15px;
   border-radius: 12px;
@@ -76,8 +77,48 @@
 }
 
 .outline-btn .material-symbols-outlined,
-.filter-btn .material-symbols-outlined {
+.filter-btn .material-symbols-outlined,
+.filter-control .material-symbols-outlined {
   font-size: 18px;
+}
+
+.filter-control {
+  position: relative;
+  min-width: 150px;
+  padding: 0 36px 0 14px;
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    transform 180ms ease;
+}
+
+.filter-control select {
+  width: 100%;
+  height: 40px;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: #111827;
+  cursor: pointer;
+  font: inherit;
+  appearance: none;
+}
+
+.filter-control .material-symbols-outlined {
+  position: absolute;
+  right: 12px;
+  pointer-events: none;
+  color: #64748b;
+}
+
+.filter-control:hover {
+  border-color: #93c5fd;
+  box-shadow: 0 8px 18px rgba(37, 99, 235, 0.1);
+  transform: translateY(-1px);
+}
+
+.route-filter {
+  min-width: 230px;
 }
 
 .export-btn {
@@ -97,6 +138,23 @@
   border: 1px solid #e2e8f0;
   border-radius: 22px;
   box-shadow: 0 8px 24px rgba(15, 23, 42, 0.04);
+  transition:
+    transform 180ms ease,
+    border-color 180ms ease,
+    box-shadow 180ms ease;
+  will-change: transform;
+}
+
+.summary-card:hover,
+.panel-card:hover,
+.table-card:hover {
+  border-color: #bfdbfe;
+  box-shadow: 0 18px 36px rgba(15, 23, 42, 0.12);
+  transform: translateY(-4px);
+}
+
+.summary-card:hover .card-icon {
+  transform: scale(1.12) rotate(-4deg);
 }
 
 .summary-card {
@@ -120,6 +178,7 @@
 
 .card-icon {
   font-size: 22px;
+  transition: transform 180ms ease;
 }
 
 .blue-icon { color: #2563eb; }
@@ -197,6 +256,17 @@
   border-radius: 10px;
   cursor: pointer;
   font-weight: 500;
+  transition:
+    background 180ms ease,
+    border-color 180ms ease,
+    color 180ms ease,
+    transform 180ms ease;
+}
+
+.tabs button:hover {
+  border-color: #93c5fd;
+  color: #1d4ed8;
+  transform: translateY(-1px);
 }
 
 .tabs .active {
@@ -207,60 +277,35 @@
 
 .route-map {
   height: 315px;
-  background: #bfdbfe;
   border-radius: 18px;
   position: relative;
   overflow: hidden;
+  isolation: isolate;
+  background: #e2e8f0;
+  border: 1px solid #dbeafe;
 }
 
-.route-marker {
-  position: absolute;
-  color: #0f172a;
-  font-size: 12px;
-  font-weight: 600;
-  text-align: center;
-}
-
-.route-marker .material-symbols-outlined {
-  display: block;
-  font-size: 34px;
-  margin-bottom: 4px;
-}
-
-.marker-central {
-  top: 26%;
-  left: 20%;
-  color: #64748b;
-}
-
-.marker-transit {
-  top: 54%;
-  left: 38%;
-  color: #2563eb;
-}
-
-.marker-delivered {
-  top: 50%;
-  right: 26%;
-  color: #16a34a;
-}
-
-.marker-delayed {
-  top: 40%;
-  right: 17%;
-  color: #ef4444;
+.route-map-frame {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  filter: saturate(0.95) contrast(1.02);
 }
 
 .route-legend {
   position: absolute;
   left: 18px;
   bottom: 16px;
-  background: white;
-  border-radius: 10px;
-  padding: 9px 14px;
+  z-index: 2;
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  border-radius: 12px;
+  padding: 10px 14px;
   display: flex;
   gap: 14px;
   font-size: 12px;
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.14);
+  backdrop-filter: blur(8px);
 }
 
 .route-legend span {
@@ -288,6 +333,18 @@
   display: flex;
   justify-content: space-between;
   gap: 14px;
+  transition:
+    background 180ms ease,
+    border-color 180ms ease,
+    transform 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.delay-item:hover {
+  background: #fff1f2;
+  border-color: #fca5a5;
+  box-shadow: 0 12px 24px rgba(220, 38, 38, 0.12);
+  transform: translateX(4px);
 }
 
 .delay-item h4 {
@@ -323,12 +380,64 @@
   border-radius: 12px;
   cursor: pointer;
   font-weight: 600;
+  transition:
+    background 180ms ease,
+    border-color 180ms ease,
+    color 180ms ease,
+    transform 180ms ease;
+}
+
+.view-btn:hover {
+  background: #eff6ff;
+  border-color: #93c5fd;
+  color: #1d4ed8;
+  transform: translateY(-1px);
+}
+
+.performance-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 18px;
+  margin-bottom: 18px;
+}
+
+.performance-header h2 {
+  margin-bottom: 6px;
+}
+
+.performance-header p {
+  color: #64748b;
+  font-size: 13px;
+}
+
+.performance-header > strong {
+  min-width: 68px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: #dcfce7;
+  color: #15803d;
+  font-size: 18px;
+  text-align: center;
+}
+
+.performance-route {
+  padding: 12px;
+  border: 1px solid transparent;
+  border-radius: 14px;
+  transition:
+    background 180ms ease,
+    border-color 180ms ease;
+}
+
+.performance-route:hover {
+  background: #f8fafc;
+  border-color: #e2e8f0;
 }
 
 .performance-item {
   display: flex;
   justify-content: space-between;
-  margin-top: 18px;
   font-size: 14px;
   gap: 16px;
 }
@@ -354,6 +463,24 @@
   height: 100%;
   background: #2563eb;
   border-radius: 999px;
+  min-width: 4px;
+  transition:
+    background 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.panel-card:hover .performance-bar div {
+  background: #1d4ed8;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+.performance-meta {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+  color: #64748b;
+  font-size: 12px;
 }
 
 .status-distribution {
@@ -393,6 +520,12 @@
   overflow-x: auto;
 }
 
+.empty-state {
+  padding: 24px;
+  color: #64748b;
+  text-align: center;
+}
+
 .table-card .section-header {
   margin-bottom: 22px;
 }
@@ -430,6 +563,7 @@
 
 .shipments-table tbody tr:hover {
   background: #f8fafc;
+  box-shadow: inset 3px 0 0 #3b82f6;
 }
 
 .id-cell {
@@ -508,6 +642,16 @@
   font-size: 12px;
   font-weight: 600;
   cursor: pointer;
+  transition:
+    filter 180ms ease,
+    transform 180ms ease;
+}
+
+.action-btn:hover,
+.text-action:hover,
+.delete-hidden:hover {
+  filter: brightness(0.97);
+  transform: translateY(-1px);
 }
 
 .primary-action {
@@ -542,10 +686,30 @@
   font-weight: 600;
   cursor: pointer;
   font-size: 13px;
+  transition:
+    color 180ms ease,
+    transform 180ms ease;
 }
 
 .delete-hidden {
-  display: none;
+  height: 32px;
+  padding: 0 12px;
+  border: none;
+  border-radius: 9px;
+  background: #f8fafc;
+  color: #64748b;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  transition:
+    background 180ms ease,
+    color 180ms ease,
+    transform 180ms ease;
+}
+
+.delete-hidden:hover {
+  background: #fee2e2;
+  color: #dc2626;
 }
 
 .page-spacer {
@@ -770,6 +934,18 @@
   height: 42px;
   border-radius: 10px;
   font-size: 15px;
+  transition:
+    background 180ms ease,
+    border-color 180ms ease,
+    color 180ms ease,
+    transform 180ms ease;
+}
+
+.outline-btn:hover {
+  background: #eff6ff;
+  border-color: #93c5fd;
+  color: #1d4ed8;
+  transform: translateY(-1px);
 }
 
 .blue-outline {

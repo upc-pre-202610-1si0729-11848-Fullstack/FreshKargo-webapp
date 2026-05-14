@@ -12,10 +12,19 @@ import {
   ShipmentModalType,
   NewShipment,
   NewRoute,
-  NewAssignment
+  NewAssignment,
+  ShipmentStatus
 } from '../../domain/model/shipment.entity';
 
 import { ShipmentsService } from '../../infrastructure/services/shipments.service';
+
+type RoutePerformance = {
+  route: string;
+  total: number;
+  delivered: number;
+  delayed: number;
+  percent: number;
+};
 
 @Component({
   selector: 'app-shipments-page',
@@ -40,6 +49,8 @@ export class ShipmentsPage implements OnInit {
   toastMessage = '';
 
   shipments: Shipment[] = [];
+  selectedStatus: ShipmentStatus | 'All statuses' = 'All statuses';
+  selectedRoute = 'All routes';
 
   newShipment: NewShipment = {
     product: '',
@@ -68,7 +79,97 @@ export class ShipmentsPage implements OnInit {
   };
 
   ngOnInit(): void {
-    this.shipments = this.shipmentsService.getShipments();
+    this.loadShipments();
+  }
+
+  get activeShipmentsCount(): number {
+    return this.shipments.filter(shipment => shipment.status !== 'Delivered').length;
+  }
+
+  get inTransitCount(): number {
+    return this.getStatusCount('In Transit');
+  }
+
+  get deliveredCount(): number {
+    return this.getStatusCount('Delivered');
+  }
+
+  get delayedShipments(): Shipment[] {
+    return this.shipments.filter(shipment => shipment.status === 'Delayed');
+  }
+
+  get delayedCount(): number {
+    return this.delayedShipments.length;
+  }
+
+  get loadingCount(): number {
+    return this.getStatusCount('Loading');
+  }
+
+  get averageTransitTemperature(): string {
+    const temperatures = this.shipments
+      .map(shipment => Number.parseFloat(shipment.temperature))
+      .filter(temperature => !Number.isNaN(temperature));
+
+    if (!temperatures.length) {
+      return '0.0C';
+    }
+
+    const average = temperatures.reduce((sum, temperature) => sum + temperature, 0) / temperatures.length;
+
+    return `${average.toFixed(1)}C`;
+  }
+
+  get routeOptions(): string[] {
+    return [...new Set(this.shipments.map(shipment => shipment.route))];
+  }
+
+  get filteredShipments(): Shipment[] {
+    return this.shipments.filter(shipment => {
+      const matchesStatus =
+        this.selectedStatus === 'All statuses'
+        || shipment.status === this.selectedStatus;
+
+      const matchesRoute =
+        this.selectedRoute === 'All routes'
+        || shipment.route === this.selectedRoute;
+
+      return matchesStatus && matchesRoute;
+    });
+  }
+
+  get performanceRoutes(): RoutePerformance[] {
+    return this.routeOptions
+      .map(route => {
+        const routeShipments = this.shipments.filter(shipment => shipment.route === route);
+        const delivered = routeShipments.filter(shipment => shipment.status === 'Delivered').length;
+        const delayed = routeShipments.filter(shipment => shipment.status === 'Delayed').length;
+        const percent = routeShipments.length
+          ? Math.round((delivered / routeShipments.length) * 100)
+          : 0;
+
+        return {
+          route,
+          total: routeShipments.length,
+          delivered,
+          delayed,
+          percent
+        };
+      })
+      .sort((first, second) => second.total - first.total)
+      .slice(0, 4);
+  }
+
+  loadShipments(): void {
+    this.shipmentsService.getShipments().subscribe({
+      next: (shipments) => {
+        this.shipments = [...shipments];
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        this.triggerToast('Error loading shipments');
+      }
+    });
   }
 
   openShipmentModal(): void {
@@ -104,38 +205,116 @@ export class ShipmentsPage implements OnInit {
       return;
     }
 
-    this.shipments = this.shipmentsService.createShipment(this.newShipment);
-
-    this.closeModal();
-    this.triggerToast('Shipment created successfully');
+    this.shipmentsService.createShipment(
+      this.newShipment,
+      this.shipments
+    ).subscribe({
+      next: (shipment) => {
+        this.shipments = [shipment, ...this.shipments];
+        this.closeModal();
+        this.triggerToast('Shipment created successfully');
+      },
+      error: () => {
+        this.triggerToast('Error creating shipment');
+      }
+    });
   }
 
   createRoute(): void {
-    const wasCreated = this.shipmentsService.createRoute(this.newRoute);
-
-    if (!wasCreated) {
+    if (!this.newRoute.name || !this.newRoute.origin || !this.newRoute.destination) {
       return;
     }
 
-    this.closeModal();
-    this.triggerToast('Route created successfully');
+    this.shipmentsService.createRoute(this.newRoute).subscribe({
+      next: () => {
+        this.closeModal();
+        this.triggerToast('Route created successfully');
+      },
+      error: () => {
+        this.triggerToast('Error creating route');
+      }
+    });
   }
 
   assignVehicle(): void {
-    const wasAssigned = this.shipmentsService.assignVehicle(this.newAssignment);
-
-    if (!wasAssigned) {
+    if (!this.newAssignment.shipmentId || !this.newAssignment.vehicle || !this.newAssignment.driver) {
       return;
     }
 
-    this.closeModal();
-    this.triggerToast('Vehicle assigned successfully');
+    this.shipmentsService.assignVehicle(this.newAssignment).subscribe({
+      next: () => {
+        this.closeModal();
+        this.triggerToast('Vehicle assigned successfully');
+      },
+      error: () => {
+        this.triggerToast('Error assigning vehicle');
+      }
+    });
   }
 
-  deleteShipment(index: number): void {
-    this.shipments = this.shipmentsService.deleteShipment(index);
+  updateShipmentStatus(
+    shipment: Shipment,
+    status: ShipmentStatus
+  ): void {
+    this.shipmentsService.updateShipmentStatus(shipment.id, status).subscribe({
+      next: (updatedShipment) => {
+        this.shipments = this.shipments.map(currentShipment =>
+          currentShipment.id === updatedShipment.id ? updatedShipment : currentShipment
+        );
+        this.triggerToast('Shipment updated successfully');
+      },
+      error: () => {
+        this.triggerToast('Error updating shipment');
+      }
+    });
+  }
 
-    this.triggerToast('Shipment deleted successfully');
+  deleteShipment(shipment: Shipment): void {
+    this.shipmentsService.deleteShipment(shipment.id).subscribe({
+      next: () => {
+        this.shipments = this.shipments.filter(currentShipment => currentShipment.id !== shipment.id);
+        this.triggerToast('Shipment deleted successfully');
+      },
+      error: () => {
+        this.triggerToast('Error deleting shipment');
+      }
+    });
+  }
+
+  clearFilters(): void {
+    this.selectedStatus = 'All statuses';
+    this.selectedRoute = 'All routes';
+  }
+
+  exportShipments(): void {
+    const headers = [
+      'id',
+      'product',
+      'batch',
+      'temperature',
+      'route',
+      'driver',
+      'eta',
+      'status'
+    ];
+
+    const rows = this.filteredShipments.map(shipment =>
+      headers
+        .map(header => this.escapeCsvValue(shipment[header as keyof Shipment]))
+        .join(',')
+    );
+
+    const csv = [headers.join(','), ...rows].join('\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+
+    link.href = url;
+    link.download = 'freshkargo-shipments.csv';
+    link.click();
+
+    URL.revokeObjectURL(url);
+    this.triggerToast('Shipments exported successfully');
   }
 
   triggerToast(message: string): void {
@@ -148,6 +327,16 @@ export class ShipmentsPage implements OnInit {
       this.showToast = false;
       this.cdr.detectChanges();
     }, 2400);
+  }
+
+  private getStatusCount(status: ShipmentStatus): number {
+    return this.shipments.filter(shipment => shipment.status === status).length;
+  }
+
+  private escapeCsvValue(value: string | number): string {
+    const text = String(value).replace(/"/g, '""');
+
+    return `"${text}"`;
   }
 
   private resetForms(): void {

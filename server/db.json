@@ -8,7 +8,7 @@
       "expiryDate": "2026-04-28",
       "category": "Fruits",
       "stock": 450,
-      "temperature": "3°C",
+      "temperature": "3C",
       "status": "Good",
       "batch": "BT-4501",
       "minStock": 80
@@ -21,7 +21,7 @@
       "expiryDate": "2026-04-25",
       "category": "Vegetables",
       "stock": 320,
-      "temperature": "5°C",
+      "temperature": "5C",
       "status": "Expiring Soon",
       "batch": "BT-4518",
       "minStock": 60
@@ -34,7 +34,7 @@
       "expiryDate": "2026-04-24",
       "category": "Dairy",
       "stock": 180,
-      "temperature": "4°C",
+      "temperature": "4C",
       "status": "Critical",
       "batch": "BT-4521",
       "minStock": 40
@@ -47,7 +47,7 @@
       "expiryDate": "2026-06-15",
       "category": "Frozen",
       "stock": 560,
-      "temperature": "-18°C",
+      "temperature": "-18C",
       "status": "Good",
       "batch": "BT-4498",
       "minStock": 120
@@ -60,7 +60,7 @@
       "expiryDate": "2026-04-26",
       "category": "Fruits",
       "stock": 42,
-      "temperature": "6°C",
+      "temperature": "6C",
       "status": "Low Stock",
       "batch": "BT-4503",
       "minStock": 50
@@ -68,24 +68,74 @@
   ],
   "shipments": [
     {
-      "id": "FK-1023",
-      "product": "Berries",
-      "batch": "BT-4521",
-      "temperature": "3°C",
-      "route": "Lima Central → Surco Market",
-      "driver": "Carlos M.",
-      "eta": "12:30 PM",
-      "status": "In Transit"
-    },
-    {
       "id": "FK-1024",
-      "product": "Lettuce",
+      "product": "Organic Lettuce",
       "batch": "BT-4518",
-      "temperature": "5°C",
-      "route": "Callao Hub → Miraflores Store",
+      "temperature": "5C",
+      "route": "Callao Hub -> Miraflores Store",
       "driver": "Ana R.",
       "eta": "1:15 PM",
       "status": "Delivered"
+    },
+    {
+      "id": "FK-1029",
+      "product": "Fresh Milk",
+      "batch": "BT-4522",
+      "temperature": "4C",
+      "route": "Lima Central -> San Borja",
+      "driver": "Diego F.",
+      "eta": "10:40 AM",
+      "status": "Delivered"
+    },
+    {
+      "id": "FK-1031",
+      "product": "Yogurt Packs",
+      "batch": "BT-4530",
+      "temperature": "4C",
+      "route": "Callao Hub -> Pueblo Libre",
+      "driver": "Raul N.",
+      "eta": "2:10 PM",
+      "status": "Rejected"
+    },
+    {
+      "id": "FK-1033",
+      "product": "Spinach",
+      "batch": "BT-4536",
+      "temperature": "5C",
+      "route": "North Hub -> San Miguel",
+      "driver": "Miguel A.",
+      "eta": "6:05 PM",
+      "status": "Delivered"
+    },
+    {
+      "id": "FK-1035",
+      "product": "Mango Crates",
+      "batch": "BT-4540",
+      "temperature": "7C",
+      "route": "South Hub -> Villa El Salvador",
+      "driver": "Jorge H.",
+      "eta": "7:20 PM",
+      "status": "Delayed"
+    },
+    {
+      "product": "patata",
+      "batch": "fff",
+      "temperature": "6",
+      "route": "Callao",
+      "driver": "YO",
+      "eta": "6PM-4AM",
+      "status": "Rejected",
+      "id": "FK-1036"
+    },
+    {
+      "product": "arroz",
+      "batch": "dddd",
+      "temperature": "3",
+      "route": "Miraflores",
+      "driver": "a",
+      "eta": "345",
+      "status": "Delayed",
+      "id": "FK-1037"
     }
   ],
   "warehouses": [
@@ -108,6 +158,43 @@
       "capacity": 1600
     }
   ],
-  "routes": [],
+  "routes": [
+    {
+      "id": "RT-001",
+      "name": "Lima Central to Surco Market",
+      "type": "Cold chain",
+      "origin": "Lima Central",
+      "destination": "Surco Market",
+      "duration": "45 min",
+      "distance": "18 km"
+    },
+    {
+      "id": "RT-002",
+      "name": "Callao Hub to Miraflores Store",
+      "type": "Urban delivery",
+      "origin": "Callao Hub",
+      "destination": "Miraflores Store",
+      "duration": "55 min",
+      "distance": "22 km"
+    },
+    {
+      "id": "RT-003",
+      "name": "South Hub to Barranco Store",
+      "type": "Frozen delivery",
+      "origin": "South Hub",
+      "destination": "Barranco Store",
+      "duration": "50 min",
+      "distance": "20 km"
+    },
+    {
+      "name": "Chorrillo",
+      "type": "D",
+      "origin": "LIMA",
+      "destination": "OXXO",
+      "duration": "80 Min",
+      "distance": "24 km",
+      "id": "EmeWHVc"
+    }
+  ],
   "dispatches": []
 }
