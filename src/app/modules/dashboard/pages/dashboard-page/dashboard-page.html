@@ -50,25 +50,25 @@
 
     <app-stats-card
       title="Inventory Health"
-      value="94%"
+      [value]="inventoryHealth"
       icon="inventory_2"
     />
 
     <app-stats-card
       title="Active Shipments"
-      value="128"
+      [value]="activeShipments"
       icon="local_shipping"
     />
 
     <app-stats-card
       title="Cold Chain Compliance"
-      value="97.8%"
+      [value]="coldChainCompliance"
       icon="ac_unit"
     />
 
     <app-stats-card
       title="Spoilage Risk"
-      value="Low"
+      [value]="spoilageRiskItems"
       icon="warning"
     />
 
@@ -187,82 +187,44 @@
 
       <h2>Inventory by Category</h2>
 
-      <div class="progress-item">
-        <span>Fruits</span>
-        <span>32%</span>
-      </div>
+      <ng-container *ngFor="let category of categorySummary">
 
-      <div class="progress-bar">
-        <div class="progress-fill fill-1"></div>
-      </div>
+        <div class="progress-item">
+          <span>{{ category.name }}</span>
+          <span>{{ category.percent }}%</span>
+        </div>
 
-      <div class="progress-item">
-        <span>Vegetables</span>
-        <span>24%</span>
-      </div>
+        <div class="progress-bar">
+          <div
+            class="progress-fill"
+            [ngClass]="category.className"
+            [style.width.%]="category.percent">
+          </div>
+        </div>
 
-      <div class="progress-bar">
-        <div class="progress-fill fill-2"></div>
-      </div>
-
-      <div class="progress-item">
-        <span>Dairy</span>
-        <span>18%</span>
-      </div>
-
-      <div class="progress-bar">
-        <div class="progress-fill fill-3"></div>
-      </div>
-
-      <div class="progress-item">
-        <span>Frozen</span>
-        <span>15%</span>
-      </div>
-
-      <div class="progress-bar">
-        <div class="progress-fill fill-4"></div>
-      </div>
-
-      <div class="progress-item">
-        <span>Ready-to-ship</span>
-        <span>11%</span>
-      </div>
-
-      <div class="progress-bar">
-        <div class="progress-fill fill-5"></div>
-      </div>
+      </ng-container>
 
     </div>
-
     <div class="mini-card">
 
       <h2>Warehouse Performance</h2>
 
-      <div class="warehouse-box">
+      <div
+        class="warehouse-box"
+        *ngFor="let warehouse of warehousePerformance">
+
         <div>
-          <h4>Lima Central</h4>
-          <p>On-time: 96% &nbsp; Avg. temp: 4°C</p>
+          <h4>{{ warehouse.name }}</h4>
+          <p>
+            On-time: {{ warehouse.onTime }}% &nbsp;
+            Avg. temp: {{ warehouse.avgTemp }}
+          </p>
         </div>
 
-        <span class="green-status">Low</span>
-      </div>
+        <span [ngClass]="warehouse.statusClass">
+        {{ warehouse.risk }}
+      </span>
 
-      <div class="warehouse-box">
-        <div>
-          <h4>North Hub</h4>
-          <p>On-time: 91% &nbsp; Avg. temp: 6°C</p>
-        </div>
-
-        <span class="yellow-status">Medium</span>
-      </div>
-
-      <div class="warehouse-box">
-        <div>
-          <h4>South Hub</h4>
-          <p>On-time: 94% &nbsp; Avg. temp: 5°C</p>
-        </div>
-
-        <span class="green-status">Low</span>
       </div>
 
     </div>
@@ -306,52 +268,30 @@
 
       <tbody>
 
-      <tr>
-        <td>FK-1023</td>
-        <td>Berries</td>
-        <td>Lima → Surco</td>
-        <td>3°C</td>
-        <td>12:30 PM</td>
-        <td>
-          <span class="status-blue">In Transit</span>
-        </td>
-        <td class="view-link">View</td>
-      </tr>
+      <tr *ngFor="let shipment of recentShipments">
 
-      <tr>
-        <td>FK-1024</td>
-        <td>Lettuce</td>
-        <td>Callao → Miraflores</td>
-        <td>5°C</td>
-        <td>1:15 PM</td>
-        <td>
-          <span class="status-green">Delivered</span>
-        </td>
-        <td class="view-link">View</td>
-      </tr>
+        <td>{{ shipment.id }}</td>
+        <td>{{ shipment.product }}</td>
+        <td>{{ shipment.route }}</td>
+        <td>{{ shipment.temperature }}</td>
+        <td>{{ shipment.eta }}</td>
 
-      <tr>
-        <td>FK-1025</td>
-        <td>Dairy</td>
-        <td>Lima → San Isidro</td>
-        <td>6°C</td>
-        <td>2:40 PM</td>
         <td>
-          <span class="status-red">Delayed</span>
+          <span
+            [ngClass]="{
+              'status-blue': shipment.status === 'In Transit',
+              'status-green': shipment.status === 'Delivered',
+              'status-red': shipment.status === 'Delayed',
+              'status-yellow': shipment.status === 'Loading'
+            }">
+            {{ shipment.status }}
+          </span>
         </td>
-        <td class="view-link">View</td>
-      </tr>
 
-      <tr>
-        <td>FK-1026</td>
-        <td>Chicken</td>
-        <td>Surco → Barranco</td>
-        <td>2°C</td>
-        <td>3:00 PM</td>
-        <td>
-          <span class="status-blue">In Transit</span>
+        <td class="view-link">
+          View
         </td>
-        <td class="view-link">View</td>
+
       </tr>
 
       </tbody>
@@ -361,3 +301,4 @@
   </div>
 
 </div>
+
