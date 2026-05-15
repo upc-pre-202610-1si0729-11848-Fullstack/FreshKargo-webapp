@@ -606,69 +606,7 @@
     </div>
 
   </div>
-  <div>
 
-    <div class="modal confirm-modal">
-
-      <div class="modal-header">
-        <div>
-          <h2>Register Waste</h2>
-          <p>Record damaged, expired, or rejected inventory units.</p>
-        </div>
-
-        <button (click)="closeWasteModal()">
-          ✕
-        </button>
-      </div>
-
-      <div class="form-group">
-        <label>Product</label>
-        <select [(ngModel)]="wasteForm.productId">
-          <option
-            *ngFor="let product of products"
-            [ngValue]="product.id">
-            {{ product.code }} - {{ product.name }} ({{ product.stock }} units)
-          </option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label>Units Lost</label>
-        <input
-          type="number"
-          min="1"
-          [(ngModel)]="wasteForm.units"
-        />
-      </div>
-
-      <div class="form-group">
-        <label>Reason</label>
-        <select [(ngModel)]="wasteForm.reason">
-          <option>Expired</option>
-          <option>Damaged</option>
-          <option>Temperature issue</option>
-          <option>Quality rejection</option>
-          <option>Other</option>
-        </select>
-      </div>
-
-      <div class="modal-footer">
-        <button
-          class="secondary-btn"
-          (click)="closeWasteModal()">
-          Cancel
-        </button>
-
-        <button
-          class="primary-btn"
-          (click)="registerWaste()">
-          Save Waste
-        </button>
-      </div>
-
-    </div>
-
-  </div>
   <div
     class="modal-overlay"
     *ngIf="isWasteModalOpen">

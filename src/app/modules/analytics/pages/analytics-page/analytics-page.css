@@ -571,3 +571,44 @@
 .chart-tabs button:active {
   transform: translateY(0);
 }
+@media (max-width: 768px) {
+  .performance-card {
+    padding: 24px 16px 28px;
+    overflow: hidden;
+  }
+
+  .section-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 18px;
+  }
+
+  .chart-tabs {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .chart-tabs button {
+    width: 100%;
+    height: 42px;
+  }
+
+  .ng-chart-container {
+    height: 360px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .ng-chart-container canvas {
+    min-width: 460px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .ng-chart-container canvas {
+    min-width: 420px !important;
+  }
+}
