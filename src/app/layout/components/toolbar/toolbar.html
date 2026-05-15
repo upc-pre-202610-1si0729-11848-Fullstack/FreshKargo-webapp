@@ -8,7 +8,7 @@
 
     <input
       type="text"
-      placeholder="Search shipments, inventory..."
+      [placeholder]="'searchPlaceholder' | translate"
     />
 
   </div>
@@ -16,7 +16,7 @@
   <div class="toolbar-actions">
 
     <button class="new-btn">
-      + New Shipment
+      {{ 'newShipment' | translate }}
     </button>
 
     <button class="icon-btn notification-btn">
@@ -31,21 +31,25 @@
 
     </button>
 
-    <button class="icon-btn">
+    <button
+      class="icon-btn language-btn"
+      (click)="toggleLanguage()">
+
       <span class="material-symbols-outlined">
-        help
+        language
       </span>
+
     </button>
 
     <div class="profile">
 
       <div class="avatar">
-        F
+        U
       </div>
 
       <div>
-        <h4>User</h4>
-        <p>Administrator</p>
+        <h4>{{ 'userName' | translate }}</h4>
+        <p>{{ 'userRole' | translate }}</p>
       </div>
 
     </div>
