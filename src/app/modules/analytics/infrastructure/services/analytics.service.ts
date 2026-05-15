@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 import {
   AnalyticsCharts,
@@ -6,13 +8,41 @@ import {
   ShipmentCategory,
   SpoilageTrendItem,
   SupplierPerformance,
-  WarehousePerformance
+  WarehousePerformance,
+
 } from '../../domain/model/analytics.entity';
 
+import { InventoryProduct } from '../../../inventory/domain/model/product.entity';
+import { Shipment } from '../../../shipments/domain/model/shipment.entity';
+import { environment } from '../../../../../environments/environment';
+
+export interface Warehouse {
+  id: string;
+  name: string;
+  location: string;
+  capacity: number;
+}
+
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AnalyticsService {
+  private readonly productsUrl = `${environment.apiBaseUrl}/products`;
+  private readonly shipmentsUrl = `${environment.apiBaseUrl}/shipments`;
+  private readonly warehousesUrl = `${environment.apiBaseUrl}/warehouses`;
+
+  constructor(private http: HttpClient) {}
+  getProducts(): Observable<InventoryProduct[]> {
+    return this.http.get<InventoryProduct[]>(this.productsUrl);
+  }
+
+  getShipments(): Observable<Shipment[]> {
+    return this.http.get<Shipment[]>(this.shipmentsUrl);
+  }
+
+  getWarehouses(): Observable<Warehouse[]> {
+    return this.http.get<Warehouse[]>(this.warehousesUrl);
+  }
 
   getCharts(): AnalyticsCharts {
     return {
@@ -27,7 +57,7 @@ export class AnalyticsService {
             backgroundColor: '#4056b4',
             borderRadius: 6,
             barPercentage: 0.75,
-            categoryPercentage: 0.7
+            categoryPercentage: 0.7,
           },
           {
             label: 'Inventory Accuracy',
@@ -35,7 +65,7 @@ export class AnalyticsService {
             backgroundColor: '#31429d',
             borderRadius: 6,
             barPercentage: 0.75,
-            categoryPercentage: 0.7
+            categoryPercentage: 0.7,
           },
           {
             label: 'Cold Chain Compliance',
@@ -43,9 +73,9 @@ export class AnalyticsService {
             backgroundColor: '#c7cdec',
             borderRadius: 6,
             barPercentage: 0.75,
-            categoryPercentage: 0.7
-          }
-        ]
+            categoryPercentage: 0.7,
+          },
+        ],
       },
 
       performanceChartOptions: {
@@ -54,22 +84,22 @@ export class AnalyticsService {
         scales: {
           x: {
             grid: {
-              display: false
+              display: false,
             },
             ticks: {
-              color: '#737373'
-            }
+              color: '#737373',
+            },
           },
           y: {
             beginAtZero: true,
             max: 110,
             grid: {
-              color: '#eeeeee'
+              color: '#eeeeee',
             },
             ticks: {
-              color: '#737373'
-            }
-          }
+              color: '#737373',
+            },
+          },
         },
         plugins: {
           legend: {
@@ -78,31 +108,23 @@ export class AnalyticsService {
               usePointStyle: true,
               pointStyle: 'circle',
               padding: 24,
-              color: '#737373'
-            }
-          }
-        }
+              color: '#737373',
+            },
+          },
+        },
       },
 
       temperatureChartType: 'doughnut',
 
       temperatureChartData: {
-        labels: [
-          'Within Range',
-          'Minor Deviation',
-          'Critical Deviation'
-        ],
+        labels: ['Within Range', 'Minor Deviation', 'Critical Deviation'],
         datasets: [
           {
             data: [1420, 28, 4],
-            backgroundColor: [
-              '#4056b4',
-              '#f59e0b',
-              '#ef4444'
-            ],
-            borderWidth: 0
-          }
-        ]
+            backgroundColor: ['#4056b4', '#f59e0b', '#ef4444'],
+            borderWidth: 0,
+          },
+        ],
       },
 
       temperatureChartOptions: {
@@ -111,10 +133,10 @@ export class AnalyticsService {
         cutout: '72%',
         plugins: {
           legend: {
-            display: false
-          }
-        }
-      }
+            display: false,
+          },
+        },
+      },
     };
   }
 
@@ -124,26 +146,26 @@ export class AnalyticsService {
         title: 'On-Time Delivery Rate',
         value: '94.2%',
         change: '+2.1% vs last month',
-        icon: 'local_shipping'
+        icon: 'local_shipping',
       },
       {
         title: 'Inventory Accuracy',
         value: '96.8%',
         change: '+1.4% vs last month',
-        icon: 'inventory_2'
+        icon: 'inventory_2',
       },
       {
         title: 'Cold Chain Compliance',
         value: '97.8%',
         change: '+0.8% vs last month',
-        icon: 'device_thermostat'
+        icon: 'device_thermostat',
       },
       {
         title: 'Waste Reduction',
         value: '28.5%',
         change: '↓ vs last quarter',
-        icon: 'trending_up'
-      }
+        icon: 'trending_up',
+      },
     ];
   }
 
@@ -152,23 +174,23 @@ export class AnalyticsService {
       {
         month: 'January',
         units: '45 units (2.4%)',
-        width: 48
+        width: 48,
       },
       {
         month: 'February',
         units: '38 units (2%)',
-        width: 40
+        width: 40,
       },
       {
         month: 'March',
         units: '32 units (1.7%)',
-        width: 34
+        width: 34,
       },
       {
         month: 'April',
         units: '28 units (1.5%)',
-        width: 30
-      }
+        width: 30,
+      },
     ];
   }
 
@@ -178,32 +200,32 @@ export class AnalyticsService {
         count: 342,
         name: 'Fruits',
         percent: '34.1%',
-        tone: 'dark'
+        tone: 'dark',
       },
       {
         count: 298,
         name: 'Vegetables',
         percent: '29.7%',
-        tone: 'dark'
+        tone: 'dark',
       },
       {
         count: 156,
         name: 'Dairy',
         percent: '15.6%',
-        tone: 'light'
+        tone: 'light',
       },
       {
         count: 124,
         name: 'Frozen',
         percent: '12.4%',
-        tone: 'gray'
+        tone: 'gray',
       },
       {
         count: 82,
         name: 'Other',
         percent: '8.2%',
-        tone: 'gray'
-      }
+        tone: 'gray',
+      },
     ];
   }
 
@@ -215,7 +237,7 @@ export class AnalyticsService {
         accuracy: '98%',
         compliance: '99%',
         waste: '2.1%',
-        type: 'good'
+        type: 'good',
       },
       {
         warehouse: 'North Hub',
@@ -223,7 +245,7 @@ export class AnalyticsService {
         accuracy: '94%',
         compliance: '96%',
         waste: '3.8%',
-        type: 'warning'
+        type: 'warning',
       },
       {
         warehouse: 'South Hub',
@@ -231,7 +253,7 @@ export class AnalyticsService {
         accuracy: '97%',
         compliance: '98%',
         waste: '2.4%',
-        type: 'good'
+        type: 'good',
       },
       {
         warehouse: 'Callao Hub',
@@ -239,8 +261,8 @@ export class AnalyticsService {
         accuracy: '92%',
         compliance: '94%',
         waste: '4.2%',
-        type: 'danger'
-      }
+        type: 'danger',
+      },
     ];
   }
 
@@ -250,27 +272,26 @@ export class AnalyticsService {
         name: 'Fresh Farms Co.',
         rating: '4.8',
         onTime: '96%',
-        quality: '98%'
+        quality: '98%',
       },
       {
         name: 'Green Valley Produce',
         rating: '4.5',
         onTime: '91%',
-        quality: '94%'
+        quality: '94%',
       },
       {
         name: 'Coastal Distributors',
         rating: '4.7',
         onTime: '94%',
-        quality: '96%'
+        quality: '96%',
       },
       {
         name: 'Mountain Fresh',
         rating: '4.3',
         onTime: '88%',
-        quality: '91%'
-      }
+        quality: '91%',
+      },
     ];
   }
-
 }

@@ -12,26 +12,42 @@
 
     <div class="header-actions">
 
-      <button class="period-btn active">
+      <button
+        class="period-btn"
+        [class.active]="activePeriod === 'today'"
+        (click)="setActivePeriod('today')">
         Today
       </button>
 
-      <button class="period-btn">
+      <button
+        class="period-btn"
+        [class.active]="activePeriod === 'weekly'"
+        (click)="setActivePeriod('weekly')">
         Weekly
       </button>
 
-      <button class="period-btn">
+      <button
+        class="period-btn"
+        [class.active]="activePeriod === 'monthly'"
+        (click)="setActivePeriod('monthly')">
         Monthly
       </button>
 
-      <button class="period-btn">
+      <button
+        class="period-btn"
+        [class.active]="activePeriod === 'quarterly'"
+        (click)="setActivePeriod('quarterly')">
         Quarterly
       </button>
 
-      <button class="export-btn">
-        <span class="material-symbols-outlined">
-          download
-        </span>
+      <button
+        class="export-btn"
+        (click)="exportAnalytics()">
+
+  <span class="material-symbols-outlined">
+    download
+  </span>
+
         Export
       </button>
 
@@ -78,11 +94,15 @@
       </div>
 
       <div class="chart-tabs">
-        <button class="active">
+        <button
+          [class.active]="performanceChartType === 'bar'"
+          (click)="setPerformanceChartType('bar')">
           Bar Chart
         </button>
 
-        <button>
+        <button
+          [class.active]="performanceChartType === 'line'"
+          (click)="setPerformanceChartType('line')">
           Line Chart
         </button>
       </div>
@@ -186,17 +206,23 @@
 
         <div>
           <span>Within Range</span>
-          <strong class="green-text">1,420 shipments</strong>
+          <strong class="green-text">
+            {{ withinRangeCount }} shipments
+          </strong>
         </div>
 
         <div>
           <span>Minor Deviation</span>
-          <strong class="orange-text">28 shipments</strong>
+          <strong class="orange-text">
+            {{ minorDeviationCount }} shipments
+          </strong>
         </div>
 
         <div>
           <span>Critical Deviation</span>
-          <strong class="red-text">4 shipments</strong>
+          <strong class="red-text">
+            {{ criticalDeviationCount }} shipments
+          </strong>
         </div>
 
       </div>
