@@ -5,13 +5,13 @@
       "code": "PRD-001",
       "name": "Fresh Berries",
       "warehouse": "Lima Central",
-      "expiryDate": "2026-04-24",
+      "expiryDate": "2026-06-06",
       "category": "Fruits",
       "stock": 300,
       "temperature": "3°C",
       "batch": "BT-4506",
       "minStock": 30,
-      "status": "Expiring Soon"
+      "status": "Good"
     },
     {
       "id": 2,
@@ -135,7 +135,7 @@
       "route": "Lima Central -> Magdalena",
       "driver": "Valeria T.",
       "eta": "11:25 AM",
-      "status": "In Transit"
+      "status": "Delivered"
     },
     {
       "id": "FK-1031",

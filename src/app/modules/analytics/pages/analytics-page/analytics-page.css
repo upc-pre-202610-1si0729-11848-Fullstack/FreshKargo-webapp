@@ -110,7 +110,7 @@
 }
 
 .performance-card {
-  padding: 28px 36px 30px;
+  padding: 32px 36px 40px;
 }
 
 .section-header {
@@ -156,8 +156,12 @@
 }
 
 .ng-chart-container {
-  height: 430px;
-  margin-top: 28px;
+  height: 520px;
+  margin-top: 24px;
+}
+.ng-chart-container canvas {
+  width: 100% !important;
+  height: 100% !important;
 }
 
 .middle-grid {
@@ -421,7 +425,7 @@
   }
 
   .ng-chart-container {
-    height: 360px;
+    height: 420px;
   }
 
   .warehouse-table {

@@ -1,5 +1,6 @@
 import { ChartConfiguration, ChartOptions } from 'chart.js';
 
+
 export interface AnalyticsKpi {
   title: string;
   value: string;
