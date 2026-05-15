@@ -190,17 +190,23 @@
 
         <div>
           <span>Within Range</span>
-          <strong class="green-text">1,420 shipments</strong>
+          <strong class="green-text">
+            {{ withinRangeCount }} shipments
+          </strong>
         </div>
 
         <div>
           <span>Minor Deviation</span>
-          <strong class="orange-text">28 shipments</strong>
+          <strong class="orange-text">
+            {{ minorDeviationCount }} shipments
+          </strong>
         </div>
 
         <div>
           <span>Critical Deviation</span>
-          <strong class="red-text">4 shipments</strong>
+          <strong class="red-text">
+            {{ criticalDeviationCount }} shipments
+          </strong>
         </div>
 
       </div>

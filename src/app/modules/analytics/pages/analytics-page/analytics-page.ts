@@ -60,6 +60,9 @@ export class AnalyticsPage implements OnInit {
   warehousePerformance: WarehousePerformance[] = [];
   suppliers: SupplierPerformance[] = [];
 
+  withinRangeCount = 0;
+  minorDeviationCount = 0;
+  criticalDeviationCount = 0;
   constructor(
     private analyticsService: AnalyticsService,
     private cdr: ChangeDetectorRef,
@@ -206,17 +209,17 @@ export class AnalyticsPage implements OnInit {
   }
 
   private buildTemperatureChart(): void {
-    const withinRange = this.products.filter(
+    this.withinRangeCount = this.products.filter(
       (product) => this.getTemperatureValue(product.temperature) <= 6,
     ).length;
 
-    const minorDeviation = this.products.filter(
+    this.minorDeviationCount = this.products.filter(
       (product) =>
         this.getTemperatureValue(product.temperature) > 6 &&
         this.getTemperatureValue(product.temperature) <= 10,
     ).length;
 
-    const criticalDeviation = this.products.filter(
+    this.criticalDeviationCount = this.products.filter(
       (product) => this.getTemperatureValue(product.temperature) > 10,
     ).length;
 
@@ -224,7 +227,7 @@ export class AnalyticsPage implements OnInit {
       labels: ['Within Range', 'Minor Deviation', 'Critical Deviation'],
       datasets: [
         {
-          data: [withinRange, minorDeviation, criticalDeviation],
+          data: [this.withinRangeCount, this.minorDeviationCount, this.criticalDeviationCount],
           backgroundColor: ['#4056b4', '#f59e0b', '#ef4444'],
           borderWidth: 0,
         },
@@ -406,7 +409,32 @@ export class AnalyticsPage implements OnInit {
     };
   }
   private buildWarehousePerformance(): void {
-    this.warehousePerformance = this.analyticsService.getWarehousePerformance();
+    this.warehousePerformance = this.warehouses.map((warehouse) => {
+      const relatedProducts = this.products.filter(
+        (product) => product.warehouse === warehouse.name,
+      );
+
+      const healthyProducts = relatedProducts.filter((product) => product.status === 'Good');
+
+      const accuracy =
+        relatedProducts.length === 0 ? 0 : (healthyProducts.length / relatedProducts.length) * 100;
+
+      const waste =
+        relatedProducts.length === 0
+          ? 0
+          : ((relatedProducts.length - healthyProducts.length) / relatedProducts.length) * 100;
+
+      const type = accuracy >= 95 ? 'good' : accuracy >= 90 ? 'warning' : 'danger';
+
+      return {
+        warehouse: warehouse.name,
+        onTime: `${Math.max(88, Math.round(accuracy - 1))}%`,
+        accuracy: `${Math.round(accuracy)}%`,
+        compliance: `${Math.min(99, Math.round(accuracy + 2))}%`,
+        waste: `${waste.toFixed(1)}%`,
+        type,
+      };
+    });
   }
 
   private buildSuppliers(): void {
