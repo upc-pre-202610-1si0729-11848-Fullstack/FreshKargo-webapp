@@ -12,26 +12,42 @@
 
     <div class="header-actions">
 
-      <button class="period-btn active">
+      <button
+        class="period-btn"
+        [class.active]="activePeriod === 'today'"
+        (click)="setActivePeriod('today')">
         Today
       </button>
 
-      <button class="period-btn">
+      <button
+        class="period-btn"
+        [class.active]="activePeriod === 'weekly'"
+        (click)="setActivePeriod('weekly')">
         Weekly
       </button>
 
-      <button class="period-btn">
+      <button
+        class="period-btn"
+        [class.active]="activePeriod === 'monthly'"
+        (click)="setActivePeriod('monthly')">
         Monthly
       </button>
 
-      <button class="period-btn">
+      <button
+        class="period-btn"
+        [class.active]="activePeriod === 'quarterly'"
+        (click)="setActivePeriod('quarterly')">
         Quarterly
       </button>
 
-      <button class="export-btn">
-        <span class="material-symbols-outlined">
-          download
-        </span>
+      <button
+        class="export-btn"
+        (click)="exportAnalytics()">
+
+  <span class="material-symbols-outlined">
+    download
+  </span>
+
         Export
       </button>
 

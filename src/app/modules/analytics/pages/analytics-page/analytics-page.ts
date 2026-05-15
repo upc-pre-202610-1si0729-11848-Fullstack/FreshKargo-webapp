@@ -59,6 +59,7 @@ export class AnalyticsPage implements OnInit {
   shipmentCategories: ShipmentCategory[] = [];
   warehousePerformance: WarehousePerformance[] = [];
   suppliers: SupplierPerformance[] = [];
+  activePeriod: 'today' | 'weekly' | 'monthly' | 'quarterly' = 'today';
 
   withinRangeCount = 0;
   minorDeviationCount = 0;
@@ -70,6 +71,24 @@ export class AnalyticsPage implements OnInit {
 
   ngOnInit(): void {
     this.loadAnalyticsData();
+  }
+  setActivePeriod(period: 'today' | 'weekly' | 'monthly' | 'quarterly'): void {
+    this.activePeriod = period;
+  }
+
+  exportAnalytics(): void {
+    const content = [['Metric', 'Value'], ...this.kpis.map((kpi) => [kpi.title, kpi.value])];
+
+    const csv = content.map((row) => row.join(',')).join('\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'freshkargo-analytics.csv';
+    link.click();
+
+    URL.revokeObjectURL(url);
   }
   private loadAnalyticsData(): void {
     forkJoin({

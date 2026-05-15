@@ -505,3 +505,69 @@
   color: #64748b;
   max-width: 720px;
 }
+.kpi-card,
+.analytics-card,
+.performance-card {
+  transition:
+    transform 0.22s ease,
+    box-shadow 0.22s ease,
+    background-color 0.22s ease;
+  will-change: transform;
+}
+
+.kpi-card:hover,
+.analytics-card:hover,
+.performance-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 34px rgba(15, 23, 42, 0.08);
+}
+
+.kpi-title-row span {
+  transition:
+    transform 0.22s ease,
+    color 0.22s ease;
+}
+
+.kpi-card:hover .kpi-title-row span {
+  transform: scale(1.12) rotate(-4deg);
+  color: #3547a7;
+}
+
+.category-card,
+.supplier-card,
+.spoilage-item,
+.temperature-list div {
+  transition:
+    transform 0.18s ease,
+    background-color 0.18s ease;
+}
+
+.category-card:hover,
+.supplier-card:hover,
+.spoilage-item:hover,
+.temperature-list div:hover {
+  transform: translateX(4px);
+}
+
+.period-btn,
+.export-btn,
+.chart-tabs button {
+  transition:
+    transform 0.18s ease,
+    background-color 0.18s ease,
+    color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.period-btn:hover,
+.export-btn:hover,
+.chart-tabs button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.08);
+}
+
+.period-btn:active,
+.export-btn:active,
+.chart-tabs button:active {
+  transform: translateY(0);
+}
