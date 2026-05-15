@@ -8,7 +8,7 @@
       "expiryDate": "2026-04-24",
       "category": "Fruits",
       "stock": 300,
-      "temperature": "3C",
+      "temperature": "3°C",
       "batch": "BT-4506",
       "minStock": 30,
       "status": "Expiring Soon"
@@ -17,27 +17,27 @@
       "id": 2,
       "code": "PRD-002",
       "name": "Organic Lettuce",
-      "warehouse": "North Hub",
+      "warehouse": "Lima Central",
       "expiryDate": "2026-04-25",
       "category": "Vegetables",
-      "stock": 220,
-      "temperature": "5C",
-      "status": "Expiring Soon",
+      "stock": 10,
+      "temperature": "5°C",
       "batch": "BT-4518",
-      "minStock": 60
+      "minStock": 50,
+      "status": "Critical"
     },
     {
       "id": 3,
       "code": "PRD-003",
       "name": "Fresh Milk",
-      "warehouse": "Lima Central",
+      "warehouse": "North Hub",
       "expiryDate": "2026-04-24",
       "category": "Dairy",
       "stock": 138,
-      "temperature": "5C",
-      "status": "Expiring Soon",
+      "temperature": "15°C",
       "batch": "BT-4506",
-      "minStock": 40
+      "minStock": 40,
+      "status": "Expiring Soon"
     },
     {
       "id": 4,
@@ -56,27 +56,17 @@
       "id": 5,
       "code": "PRD-005",
       "name": "Fresh Avocados",
-      "warehouse": "Lima Central",
+      "warehouse": "North Hub",
       "expiryDate": "2026-04-26",
       "category": "Fruits",
-      "stock": 42,
-      "temperature": "6C",
-      "status": "Low Stock",
+      "stock": 70,
+      "temperature": "15°C",
       "batch": "BT-4503",
-      "minStock": 50
+      "minStock": 10,
+      "status": "Expiring Soon"
     }
   ],
   "shipments": [
-    {
-      "id": "FK-1023",
-      "product": "Fresh Berries",
-      "batch": "BT-4521",
-      "temperature": "3C",
-      "route": "Lima Central -> Surco Market",
-      "driver": "Carlos M.",
-      "eta": "12:30 PM",
-      "status": "In Transit"
-    },
     {
       "id": "FK-1024",
       "product": "Organic Lettuce",
@@ -248,13 +238,6 @@
     }
   ],
   "dispatches": [
-    {
-      "id": "DP-001",
-      "shipmentId": "FK-1023",
-      "vehicle": "TRK-014",
-      "driver": "Carlos M.",
-      "departureTime": "10:45 AM"
-    },
     {
       "id": "DP-002",
       "shipmentId": "FK-1030",
