@@ -633,3 +633,235 @@
   font-size: 22px;
   font-weight: 700;
 }
+.dashboard-modal {
+  max-width: 820px;
+  max-height: 88vh;
+  overflow: hidden;
+}
+
+.dashboard-shipments-list {
+  margin-top: 24px;
+  max-height: 500px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-right: 6px;
+}
+
+.shipment-modal-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 20px;
+  border-radius: 18px;
+  border: 1px solid #e2e8f0;
+  background: #fff;
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.shipment-modal-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 28px rgba(15, 23, 42, 0.08);
+}
+
+.shipment-modal-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.shipment-modal-info h3 {
+  margin: 0;
+}
+
+.shipment-modal-info span {
+  color: #64748b;
+  font-size: 14px;
+}
+
+.shipment-status {
+  font-weight: 600;
+}
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.dashboard-modal {
+  width: min(860px, 96vw);
+  max-height: 88vh;
+  background: #ffffff;
+  border-radius: 28px;
+  padding: 32px;
+  overflow: hidden;
+  box-shadow: 0 28px 70px rgba(15, 23, 42, 0.24);
+}
+
+.dashboard-modal .modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 20px;
+}
+
+.dashboard-modal .modal-header h2 {
+  margin: 0;
+  font-size: 28px;
+}
+
+.dashboard-modal .modal-header p {
+  margin: 6px 0 0;
+  color: #64748b;
+}
+
+.dashboard-modal .modal-header button {
+  width: 44px;
+  height: 44px;
+  border: none;
+  border-radius: 14px;
+  background: #f1f5f9;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.dashboard-shipments-list {
+  max-height: 480px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-right: 8px;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 24px;
+}
+
+.operations-card,
+.alerts-card,
+.mini-card,
+.recent-orders,
+.shipment-modal-card {
+  transition:
+    transform 0.22s ease,
+    box-shadow 0.22s ease,
+    border-color 0.22s ease;
+}
+
+.operations-card:hover,
+.alerts-card:hover,
+.mini-card:hover,
+.recent-orders:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 42px rgba(15, 23, 42, 0.12);
+}
+
+.dashboard-filters button,
+.chart-tab,
+.filter-btn,
+.view-all-btn,
+.view-alerts-btn {
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    background 0.18s ease;
+}
+
+.dashboard-filters button:hover,
+.chart-tab:hover,
+.filter-btn:hover,
+.view-all-btn:hover,
+.view-alerts-btn:hover {
+  transform: translateY(-2px);
+}
+
+.dashboard-filters button:hover,
+.filter-btn:hover,
+.view-all-btn:hover,
+.view-alerts-btn:hover {
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.12);
+}
+
+.alert-box {
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    border-color 0.18s ease;
+}
+
+.alert-box:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 28px rgba(15, 23, 42, 0.08);
+}
+
+.shipments-table tbody tr {
+  transition:
+    background 0.18s ease,
+    transform 0.18s ease;
+}
+
+.shipments-table tbody tr:hover {
+  background: #f8fafc;
+}
+
+.warehouse-box {
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.warehouse-box:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.08);
+}
+
+.progress-fill {
+  transition:
+    width 0.5s ease,
+    filter 0.2s ease,
+    transform 0.2s ease;
+}
+
+.progress-bar:hover .progress-fill {
+  filter: brightness(1.05);
+  transform: scaleY(1.15);
+}
+
+.shipment-modal-card {
+  border: 1px solid #e2e8f0;
+}
+
+.shipment-modal-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 32px rgba(15, 23, 42, 0.08);
+}
+
+.status-blue,
+.status-green,
+.status-red,
+.status-yellow {
+  transition:
+    transform 0.18s ease,
+    filter 0.18s ease;
+}
+
+.status-blue:hover,
+.status-green:hover,
+.status-red:hover,
+.status-yellow:hover {
+  transform: scale(1.05);
+  filter: brightness(1.04);
+}

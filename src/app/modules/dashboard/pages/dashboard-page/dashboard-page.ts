@@ -45,6 +45,8 @@ export class DashboardPage implements OnInit {
     className: string;
   }[] = [];
 
+  isShipmentsModalOpen = false;
+
   inventoryHealth = '0%';
   activeShipments = '0';
   coldChainCompliance = '0%';
@@ -69,6 +71,14 @@ export class DashboardPage implements OnInit {
 
   ngOnInit(): void {
     this.loadDashboardData();
+  }
+
+  openShipmentsModal(): void {
+    this.isShipmentsModalOpen = true;
+  }
+
+  closeShipmentsModal(): void {
+    this.isShipmentsModalOpen = false;
   }
 
   private loadDashboardData(): void {

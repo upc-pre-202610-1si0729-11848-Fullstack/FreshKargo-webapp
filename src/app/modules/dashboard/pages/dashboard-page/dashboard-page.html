@@ -249,7 +249,9 @@
           <span class="material-symbols-outlined">expand_more</span>
         </button>
 
-        <button class="view-all-btn">
+        <button
+          class="view-all-btn"
+          (click)="openShipmentsModal()">
           View all
         </button>
 
@@ -304,6 +306,81 @@
     </table>
 
   </div>
+  <div
+    class="modal-overlay"
+    *ngIf="isShipmentsModalOpen">
 
-</div>
+    <div class="modal details-modal dashboard-modal">
+
+      <div class="modal-header">
+
+        <div>
+          <h2>All Recent Shipments</h2>
+          <p>Real-time shipment monitoring overview.</p>
+        </div>
+
+        <button (click)="closeShipmentsModal()">
+          ✕
+        </button>
+
+      </div>
+
+      <div class="dashboard-shipments-list">
+
+        <div
+          class="shipment-modal-card"
+          *ngFor="let shipment of shipments">
+
+          <div class="shipment-modal-info">
+
+            <h3>{{ shipment.product }}</h3>
+
+            <span>
+            {{ shipment.route }}
+          </span>
+
+            <span>
+            ETA: {{ shipment.eta }}
+          </span>
+
+            <span>
+            Temperature: {{ shipment.temperature }}
+          </span>
+
+          </div>
+
+          <span
+            class="shipment-status"
+            [ngClass]="{
+            'status-blue': shipment.status === 'In Transit',
+            'status-green': shipment.status === 'Delivered',
+            'status-red': shipment.status === 'Delayed',
+            'status-yellow': shipment.status === 'Loading'
+          }">
+
+          {{ shipment.status }}
+
+        </span>
+
+        </div>
+
+      </div>
+
+      <div class="modal-footer">
+
+        <button
+          class="view-all-btn"
+          (click)="closeShipmentsModal()">
+
+          Close
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+  </div>
+
 
