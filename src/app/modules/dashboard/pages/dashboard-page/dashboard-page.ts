@@ -24,7 +24,11 @@ export class DashboardPage implements OnInit {
   warehouses: Warehouse[] = [];
   recentShipments: Shipment[] = [];
   filteredRecentShipments: Shipment[] = [];
+  filteredProducts: InventoryProduct[] = [];
+  filteredShipments: Shipment[] = [];
   selectedShipmentFilter = 'All';
+  selectedDateRange = 'Last 7 days';
+  selectedWarehouseFilter = 'All warehouses';
   selectedShipment: Shipment | null = null;
   isShipmentDetailModalOpen = false;
   isAlertsModalOpen = false;
@@ -85,6 +89,26 @@ export class DashboardPage implements OnInit {
   closeShipmentsModal(): void {
     this.isShipmentsModalOpen = false;
   }
+  applyDashboardFilters(): void {
+    this.filteredProducts =
+      this.selectedWarehouseFilter === 'All warehouses'
+        ? [...this.products]
+        : this.products.filter((product) => product.warehouse === this.selectedWarehouseFilter);
+
+    this.filteredShipments =
+      this.selectedWarehouseFilter === 'All warehouses'
+        ? [...this.shipments]
+        : this.shipments.filter((shipment) =>
+            shipment.route.includes(this.selectedWarehouseFilter),
+          );
+
+    this.recentShipments = this.filteredShipments.slice(0, 4);
+
+    this.calculateMetrics();
+    this.buildOperationsChart();
+    this.applyShipmentFilter();
+    this.cdr.detectChanges();
+  }
   applyShipmentFilter(): void {
     if (this.selectedShipmentFilter === 'All') {
       this.filteredRecentShipments = [...this.recentShipments];
@@ -120,34 +144,34 @@ export class DashboardPage implements OnInit {
       next: ({ products, shipments, warehouses }) => {
         this.products = products;
         this.shipments = shipments;
-        this.recentShipments = shipments.slice(0, 4);
-        this.applyShipmentFilter();
         this.warehouses = warehouses;
 
-        this.calculateMetrics();
-        this.buildOperationsChart();
-        this.cdr.detectChanges();
+        this.applyDashboardFilters();
       },
     });
   }
 
   private calculateMetrics(): void {
-    const totalUnits = this.products.reduce((total, product) => total + Number(product.stock), 0);
-    const healthyProducts = this.products.filter((product) => product.status === 'Good').length;
+    const healthyProducts = this.filteredProducts.filter(
+      (product) => product.status === 'Good',
+    ).length;
 
     const healthPercent =
-      this.products.length === 0 ? 0 : (healthyProducts / this.products.length) * 100;
+      this.filteredProducts.length === 0
+        ? 0
+        : (healthyProducts / this.filteredProducts.length) * 100;
 
     this.inventoryHealth = `${healthPercent.toFixed(1)}%`;
+
     this.buildCategorySummary();
     this.buildWarehousePerformance();
     this.buildOperationalAlerts();
 
-    this.activeShipments = this.shipments
+    this.activeShipments = this.filteredShipments
       .filter((shipment) => shipment.status !== 'Delivered')
       .length.toString();
 
-    this.spoilageRiskItems = this.products
+    this.spoilageRiskItems = this.filteredProducts
       .filter(
         (product) =>
           product.status === 'Critical' ||
@@ -157,17 +181,23 @@ export class DashboardPage implements OnInit {
       )
       .length.toString();
 
-    const coldSafeProducts = this.products.filter(
+    const coldSafeProducts = this.filteredProducts.filter(
       (product) => this.getTemperatureValue(product.temperature) <= 6,
     ).length;
 
     const compliance =
-      this.products.length === 0 ? 0 : (coldSafeProducts / this.products.length) * 100;
+      this.filteredProducts.length === 0
+        ? 0
+        : (coldSafeProducts / this.filteredProducts.length) * 100;
 
     this.coldChainCompliance = `${compliance.toFixed(1)}%`;
   }
+
   private buildCategorySummary(): void {
-    const totalUnits = this.products.reduce((total, product) => total + Number(product.stock), 0);
+    const totalUnits = this.filteredProducts.reduce(
+      (total, product) => total + Number(product.stock),
+      0,
+    );
 
     const categories = ['Fruits', 'Vegetables', 'Dairy', 'Frozen', 'Ready-to-ship'];
 
@@ -179,7 +209,7 @@ export class DashboardPage implements OnInit {
       'Ready-to-ship': 'fill-5',
     };
 
-    const grouped = this.products.reduce(
+    const grouped = this.filteredProducts.reduce(
       (acc, product) => {
         acc[product.category] = (acc[product.category] || 0) + Number(product.stock);
         return acc;
@@ -199,9 +229,10 @@ export class DashboardPage implements OnInit {
       };
     });
   }
+
   private buildWarehousePerformance(): void {
     this.warehousePerformance = this.warehouses.map((warehouse) => {
-      const warehouseProducts = this.products.filter(
+      const warehouseProducts = this.filteredProducts.filter(
         (product) => product.warehouse === warehouse.name,
       );
 
@@ -222,7 +253,8 @@ export class DashboardPage implements OnInit {
       ).length;
 
       const risk = riskyProducts >= 2 ? 'Medium' : 'Low';
-      const warehouseShipments = this.shipments.filter((shipment) =>
+
+      const warehouseShipments = this.filteredShipments.filter((shipment) =>
         shipment.route.includes(warehouse.name),
       );
 
@@ -249,8 +281,9 @@ export class DashboardPage implements OnInit {
       };
     });
   }
+
   private buildOperationalAlerts(): void {
-    const temperatureAlerts = this.products
+    const temperatureAlerts = this.filteredProducts
       .filter((product) => this.getTemperatureValue(product.temperature) > 6)
       .slice(0, 1)
       .map((product) => ({
@@ -261,7 +294,7 @@ export class DashboardPage implements OnInit {
         className: 'high',
       }));
 
-    const delayedShipmentAlerts = this.shipments
+    const delayedShipmentAlerts = this.filteredShipments
       .filter((shipment) => shipment.status === 'Delayed')
       .slice(0, 1)
       .map((shipment) => ({
@@ -272,7 +305,7 @@ export class DashboardPage implements OnInit {
         className: 'medium',
       }));
 
-    const lowStockAlerts = this.products
+    const lowStockAlerts = this.filteredProducts
       .filter((product) => product.status === 'Low Stock' || product.stock <= product.minStock)
       .slice(0, 1)
       .map((product) => ({
@@ -285,14 +318,23 @@ export class DashboardPage implements OnInit {
 
     this.operationalAlerts = [...temperatureAlerts, ...delayedShipmentAlerts, ...lowStockAlerts];
   }
+
   private buildOperationsChart(): void {
-    const delivered = this.shipments.filter((shipment) => shipment.status === 'Delivered').length;
+    const delivered = this.filteredShipments.filter(
+      (shipment) => shipment.status === 'Delivered',
+    ).length;
 
-    const inTransit = this.shipments.filter((shipment) => shipment.status === 'In Transit').length;
+    const inTransit = this.filteredShipments.filter(
+      (shipment) => shipment.status === 'In Transit',
+    ).length;
 
-    const delayed = this.shipments.filter((shipment) => shipment.status === 'Delayed').length;
+    const delayed = this.filteredShipments.filter(
+      (shipment) => shipment.status === 'Delayed',
+    ).length;
 
-    const loading = this.shipments.filter((shipment) => shipment.status === 'Loading').length;
+    const loading = this.filteredShipments.filter(
+      (shipment) => shipment.status === 'Loading',
+    ).length;
 
     this.operationsChartData = {
       labels: ['Delivered', 'In Transit', 'Delayed', 'Loading'],
@@ -311,6 +353,7 @@ export class DashboardPage implements OnInit {
       ],
     };
   }
+
   exportDashboardReport(): void {
     const headers = ['Section', 'Metric', 'Value'];
 

@@ -29,15 +29,31 @@
 
   <div class="dashboard-filters">
 
-    <button>
-      Last 7 days
-      <span class="material-symbols-outlined">expand_more</span>
-    </button>
+    <select
+      class="dashboard-filter-select"
+      [(ngModel)]="selectedDateRange">
 
-    <button>
-      All warehouses
-      <span class="material-symbols-outlined">expand_more</span>
-    </button>
+      <option>Last 7 days</option>
+      <option>Last 30 days</option>
+      <option>This month</option>
+      <option>This quarter</option>
+
+    </select>
+
+    <select
+      class="dashboard-filter-select"
+      [(ngModel)]="selectedWarehouseFilter"
+      (change)="applyDashboardFilters()">
+
+      <option>All warehouses</option>
+
+      <option
+        *ngFor="let warehouse of warehouses"
+        [value]="warehouse.name">
+        {{ warehouse.name }}
+      </option>
+
+    </select>
 
     <button (click)="exportDashboardReport()">
       <span class="material-symbols-outlined">download</span>
