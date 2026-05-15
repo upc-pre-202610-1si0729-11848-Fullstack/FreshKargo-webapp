@@ -865,3 +865,15 @@
   transform: scale(1.05);
   filter: brightness(1.04);
 }
+.dashboard-filter-select {
+  min-width: 200px;
+  height: 54px;
+  border: 1px solid #d1d5db;
+  border-radius: 16px;
+  background: #ffffff;
+  padding: 0 18px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #111827;
+  cursor: pointer;
+}
