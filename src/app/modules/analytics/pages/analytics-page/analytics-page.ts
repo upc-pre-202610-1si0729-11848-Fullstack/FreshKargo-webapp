@@ -36,14 +36,14 @@ export class AnalyticsPage implements OnInit {
   products: InventoryProduct[] = [];
   shipments: Shipment[] = [];
   warehouses: Warehouse[] = [];
-  performanceChartType: 'bar' = 'bar';
+  performanceChartType: 'bar' | 'line' = 'bar';
 
-  performanceChartData: ChartConfiguration<'bar'>['data'] = {
+  performanceChartData: ChartConfiguration<'bar' | 'line'>['data'] = {
     labels: [],
     datasets: [],
   };
 
-  performanceChartOptions: ChartOptions<'bar'> = {};
+  performanceChartOptions: ChartOptions<'bar' | 'line'> = {};
 
   temperatureChartType: 'doughnut' = 'doughnut';
 
@@ -279,6 +279,11 @@ export class AnalyticsPage implements OnInit {
             Math.max(0, onTimeRate - delayPenalty),
           ],
           backgroundColor: '#4056b4',
+          borderColor: '#4056b4',
+          pointBackgroundColor: '#4056b4',
+          pointBorderColor: '#4056b4',
+          tension: 0.4,
+          fill: false,
           borderRadius: 7,
           borderSkipped: false,
           barThickness: 22,
@@ -297,6 +302,11 @@ export class AnalyticsPage implements OnInit {
             inventoryAccuracy,
           ],
           backgroundColor: '#31429d',
+          borderColor: '#31429d',
+          pointBackgroundColor: '#31429d',
+          pointBorderColor: '#31429d',
+          tension: 0.4,
+          fill: false,
           borderRadius: 7,
           borderSkipped: false,
           barThickness: 22,
@@ -315,6 +325,11 @@ export class AnalyticsPage implements OnInit {
             coldCompliance,
           ],
           backgroundColor: '#c7cdec',
+          borderColor: '#c7cdec',
+          pointBackgroundColor: '#c7cdec',
+          pointBorderColor: '#c7cdec',
+          tension: 0.4,
+          fill: false,
           borderRadius: 7,
           borderSkipped: false,
           barThickness: 22,
@@ -396,6 +411,10 @@ export class AnalyticsPage implements OnInit {
 
   private buildSuppliers(): void {
     this.suppliers = this.analyticsService.getSuppliers();
+  }
+  setPerformanceChartType(type: 'bar' | 'line'): void {
+    this.performanceChartType = type;
+    this.buildPerformanceChart();
   }
 
   private getTemperatureValue(temperature: string): number {

@@ -78,11 +78,15 @@
       </div>
 
       <div class="chart-tabs">
-        <button class="active">
+        <button
+          [class.active]="performanceChartType === 'bar'"
+          (click)="setPerformanceChartType('bar')">
           Bar Chart
         </button>
 
-        <button>
+        <button
+          [class.active]="performanceChartType === 'line'"
+          (click)="setPerformanceChartType('line')">
           Line Chart
         </button>
       </div>
