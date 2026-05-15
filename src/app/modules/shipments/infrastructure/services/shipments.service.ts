@@ -11,42 +11,36 @@ import {
 } from '../../domain/model/shipment.entity';
 
 import { environment } from '../../../../../environments/environment';
+import { FirebaseDataService } from '../../../../shared/firebase/firebase-data.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ShipmentsService {
-
   private readonly shipmentsUrl = `${environment.apiBaseUrl}/shipments`;
   private readonly routesUrl = `${environment.apiBaseUrl}/routes`;
   private readonly dispatchesUrl = `${environment.apiBaseUrl}/dispatches`;
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private firebaseDataService: FirebaseDataService,
+  ) {}
 
   getShipments(): Observable<Shipment[]> {
-    return this.http.get<Shipment[]>(this.shipmentsUrl);
+    return this.firebaseDataService.getCollection<Shipment>('shipments');
   }
 
-  createShipment(
-    newShipment: NewShipment,
-    currentShipments: Shipment[]
-  ): Observable<Shipment> {
+  createShipment(newShipment: NewShipment, currentShipments: Shipment[]): Observable<Shipment> {
     const shipment: Shipment = {
       ...newShipment,
-      id: this.generateShipmentId(currentShipments)
+      id: this.generateShipmentId(currentShipments),
     };
 
     return this.http.post<Shipment>(this.shipmentsUrl, shipment);
   }
 
-  updateShipmentStatus(
-    shipmentId: string,
-    status: ShipmentStatus
-  ): Observable<Shipment> {
-    return this.http.patch<Shipment>(
-      `${this.shipmentsUrl}/${shipmentId}`,
-      { status }
-    );
+  updateShipmentStatus(shipmentId: string, status: ShipmentStatus): Observable<Shipment> {
+    return this.http.patch<Shipment>(`${this.shipmentsUrl}/${shipmentId}`, { status });
   }
 
   deleteShipment(id: string): Observable<void> {
@@ -70,5 +64,4 @@ export class ShipmentsService {
 
     return `FK-${highestId + 1}`;
   }
-
 }

@@ -15,6 +15,7 @@ import {
 import { InventoryProduct } from '../../../inventory/domain/model/product.entity';
 import { Shipment } from '../../../shipments/domain/model/shipment.entity';
 import { environment } from '../../../../../environments/environment';
+import { FirebaseDataService } from '../../../../shared/firebase/firebase-data.service';
 
 export interface Warehouse {
   id: string;
@@ -31,17 +32,21 @@ export class AnalyticsService {
   private readonly shipmentsUrl = `${environment.apiBaseUrl}/shipments`;
   private readonly warehousesUrl = `${environment.apiBaseUrl}/warehouses`;
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private firebaseDataService: FirebaseDataService
+  ) {}
+
   getProducts(): Observable<InventoryProduct[]> {
-    return this.http.get<InventoryProduct[]>(this.productsUrl);
+    return this.firebaseDataService.getCollection<InventoryProduct>('products');
   }
 
   getShipments(): Observable<Shipment[]> {
-    return this.http.get<Shipment[]>(this.shipmentsUrl);
+    return this.firebaseDataService.getCollection<Shipment>('shipments');
   }
 
   getWarehouses(): Observable<Warehouse[]> {
-    return this.http.get<Warehouse[]>(this.warehousesUrl);
+    return this.firebaseDataService.getCollection<Warehouse>('warehouses');
   }
 
   getCharts(): AnalyticsCharts {
