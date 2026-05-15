@@ -1,7 +1,7 @@
 import { Component, ChangeDetectorRef, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { forkJoin } from 'rxjs';
-
+import { FormsModule } from '@angular/forms';
 import { ChartConfiguration, ChartOptions } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
 
@@ -14,7 +14,7 @@ import { Shipment } from '../../../shipments/domain/model/shipment.entity';
 @Component({
   selector: 'app-dashboard-page',
   standalone: true,
-  imports: [CommonModule, BaseChartDirective, StatsCard],
+  imports: [CommonModule, FormsModule, BaseChartDirective, StatsCard],
   templateUrl: './dashboard-page.html',
   styleUrl: './dashboard-page.css',
 })
@@ -23,6 +23,11 @@ export class DashboardPage implements OnInit {
   shipments: Shipment[] = [];
   warehouses: Warehouse[] = [];
   recentShipments: Shipment[] = [];
+  filteredRecentShipments: Shipment[] = [];
+  selectedShipmentFilter = 'All';
+  selectedShipment: Shipment | null = null;
+  isShipmentDetailModalOpen = false;
+  isAlertsModalOpen = false;
   categorySummary: {
     name: string;
     percent: number;
@@ -80,7 +85,32 @@ export class DashboardPage implements OnInit {
   closeShipmentsModal(): void {
     this.isShipmentsModalOpen = false;
   }
+  applyShipmentFilter(): void {
+    if (this.selectedShipmentFilter === 'All') {
+      this.filteredRecentShipments = [...this.recentShipments];
+      return;
+    }
 
+    this.filteredRecentShipments = this.recentShipments.filter(
+      (shipment) => shipment.status === this.selectedShipmentFilter,
+    );
+  }
+  openShipmentDetail(shipment: Shipment): void {
+    this.selectedShipment = shipment;
+    this.isShipmentDetailModalOpen = true;
+  }
+
+  closeShipmentDetail(): void {
+    this.selectedShipment = null;
+    this.isShipmentDetailModalOpen = false;
+  }
+  openAlertsModal(): void {
+    this.isAlertsModalOpen = true;
+  }
+
+  closeAlertsModal(): void {
+    this.isAlertsModalOpen = false;
+  }
   private loadDashboardData(): void {
     forkJoin({
       products: this.dashboardService.getProducts(),
@@ -91,6 +121,7 @@ export class DashboardPage implements OnInit {
         this.products = products;
         this.shipments = shipments;
         this.recentShipments = shipments.slice(0, 4);
+        this.applyShipmentFilter();
         this.warehouses = warehouses;
 
         this.calculateMetrics();
@@ -280,7 +311,50 @@ export class DashboardPage implements OnInit {
       ],
     };
   }
+  exportDashboardReport(): void {
+    const headers = ['Section', 'Metric', 'Value'];
 
+    const rows = [
+      ['Summary', 'Inventory Health', this.inventoryHealth],
+      ['Summary', 'Active Shipments', this.activeShipments],
+      ['Summary', 'Cold Chain Compliance', this.coldChainCompliance],
+      ['Summary', 'Spoilage Risk Items', this.spoilageRiskItems],
+      ['Summary', 'Total Products', this.products.length.toString()],
+      ['Summary', 'Total Shipments', this.shipments.length.toString()],
+      ['Summary', 'Total Warehouses', this.warehouses.length.toString()],
+      ...this.categorySummary.map((category) => [
+        'Inventory by Category',
+        category.name,
+        `${category.percent}%`,
+      ]),
+      ...this.warehousePerformance.map((warehouse) => [
+        'Warehouse Performance',
+        warehouse.name,
+        `On-time ${warehouse.onTime}% | Avg temp ${warehouse.avgTemp} | Risk ${warehouse.risk}`,
+      ]),
+      ...this.operationalAlerts.map((alert) => [
+        'Operational Alerts',
+        alert.title,
+        `${alert.description} | ${alert.detail} | ${alert.severity}`,
+      ]),
+    ];
+
+    const csvContent = [headers.join(';'), ...rows.map((row) => row.join(';'))].join('\n');
+
+    const blob = new Blob(['\uFEFF' + csvContent], { type: 'text/csv;charset=utf-8;' });
+
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+
+    link.href = url;
+    link.setAttribute('download', 'dashboard-report.csv');
+
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    window.URL.revokeObjectURL(url);
+  }
   private getTemperatureValue(temperature: string): number {
     const value = Number(String(temperature).replace('°C', '').trim());
 

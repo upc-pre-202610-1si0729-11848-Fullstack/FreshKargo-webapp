@@ -39,7 +39,7 @@
       <span class="material-symbols-outlined">expand_more</span>
     </button>
 
-    <button>
+    <button (click)="exportDashboardReport()">
       <span class="material-symbols-outlined">download</span>
       Export report
     </button>
@@ -177,8 +177,9 @@
 
       </div>
 
-
-      <button class="view-alerts-btn">
+      <button
+        class="view-alerts-btn"
+        (click)="openAlertsModal()">
         View all alerts
       </button>
 
@@ -244,10 +245,18 @@
 
       <div class="table-actions">
 
-        <button class="filter-btn">
-          Filter status
-          <span class="material-symbols-outlined">expand_more</span>
-        </button>
+        <select
+          class="filter-btn"
+          [(ngModel)]="selectedShipmentFilter"
+          (change)="applyShipmentFilter()">
+
+          <option value="All">All Status</option>
+          <option value="In Transit">In Transit</option>
+          <option value="Delivered">Delivered</option>
+          <option value="Delayed">Delayed</option>
+          <option value="Loading">Loading</option>
+
+        </select>
 
         <button
           class="view-all-btn"
@@ -275,7 +284,7 @@
 
       <tbody>
 
-      <tr *ngFor="let shipment of recentShipments">
+      <tr *ngFor="let shipment of filteredRecentShipments">
 
         <td>{{ shipment.id }}</td>
         <td>{{ shipment.product }}</td>
@@ -295,7 +304,9 @@
           </span>
         </td>
 
-        <td class="view-link">
+        <td
+          class="view-link"
+          (click)="openShipmentDetail(shipment)">
           View
         </td>
 
@@ -376,6 +387,125 @@
 
         </button>
 
+      </div>
+
+    </div>
+
+  </div>
+  <div
+    class="modal-overlay"
+    *ngIf="isShipmentDetailModalOpen && selectedShipment">
+
+    <div class="dashboard-modal">
+
+      <div class="modal-header">
+        <div>
+          <h2>{{ selectedShipment.product }}</h2>
+          <p>{{ selectedShipment.id }} • {{ selectedShipment.status }}</p>
+        </div>
+
+        <button (click)="closeShipmentDetail()">
+          ✕
+        </button>
+      </div>
+
+      <div class="dashboard-shipments-list">
+
+        <div class="shipment-modal-card">
+          <div class="shipment-modal-info">
+            <h3>Route</h3>
+            <span>{{ selectedShipment.route }}</span>
+          </div>
+        </div>
+
+        <div class="shipment-modal-card">
+          <div class="shipment-modal-info">
+            <h3>Temperature</h3>
+            <span>{{ selectedShipment.temperature }}</span>
+          </div>
+        </div>
+
+        <div class="shipment-modal-card">
+          <div class="shipment-modal-info">
+            <h3>ETA</h3>
+            <span>{{ selectedShipment.eta }}</span>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="modal-footer">
+        <button
+          class="view-all-btn"
+          (click)="closeShipmentDetail()">
+          Close
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+  <div
+    class="modal-overlay"
+    *ngIf="isAlertsModalOpen">
+
+    <div class="dashboard-modal">
+
+      <div class="modal-header">
+        <div>
+          <h2>All Operational Alerts</h2>
+          <p>Inventory and shipment issues requiring attention.</p>
+        </div>
+
+        <button (click)="closeAlertsModal()">
+          ✕
+        </button>
+      </div>
+
+      <div class="dashboard-shipments-list">
+
+        <div
+          class="alert-box"
+          *ngFor="let alert of operationalAlerts">
+
+          <div>
+            <h4>{{ alert.title }}</h4>
+            <p>{{ alert.description }}</p>
+            <p>{{ alert.detail }}</p>
+          </div>
+
+          <span
+            class="alert-tag"
+            [ngClass]="alert.className">
+          {{ alert.severity }}
+        </span>
+
+        </div>
+
+        <div
+          class="alert-box"
+          *ngIf="operationalAlerts.length === 0">
+
+          <div>
+            <h4>No operational alerts</h4>
+            <p>All inventory and shipments are currently stable.</p>
+            <p>No immediate action required.</p>
+          </div>
+
+          <span class="alert-tag low">
+          Good
+        </span>
+
+        </div>
+
+      </div>
+
+      <div class="modal-footer">
+        <button
+          class="view-all-btn"
+          (click)="closeAlertsModal()">
+          Close
+        </button>
       </div>
 
     </div>
