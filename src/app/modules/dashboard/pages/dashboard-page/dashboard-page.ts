@@ -1,6 +1,6 @@
 import { Component, ChangeDetectorRef, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { forkJoin } from 'rxjs';
+import { combineLatest } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { ChartConfiguration, ChartOptions } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
@@ -136,7 +136,7 @@ export class DashboardPage implements OnInit {
     this.isAlertsModalOpen = false;
   }
   private loadDashboardData(): void {
-    forkJoin({
+    combineLatest({
       products: this.dashboardService.getProducts(),
       shipments: this.dashboardService.getShipments(),
       warehouses: this.dashboardService.getWarehouses(),
