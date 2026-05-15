@@ -1,6 +1,6 @@
 import { Component, ChangeDetectorRef, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { forkJoin } from 'rxjs';
+import { combineLatest } from 'rxjs';
 
 import { BaseChartDirective } from 'ng2-charts';
 
@@ -92,7 +92,7 @@ export class AnalyticsPage implements OnInit {
     URL.revokeObjectURL(url);
   }
   private loadAnalyticsData(): void {
-    forkJoin({
+    combineLatest({
       products: this.analyticsService.getProducts(),
       shipments: this.analyticsService.getShipments(),
       warehouses: this.analyticsService.getWarehouses(),
