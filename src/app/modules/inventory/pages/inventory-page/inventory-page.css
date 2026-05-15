@@ -647,6 +647,31 @@ td {
   .modal {
     width: 92%;
   }
+  .performance-card {
+    padding: 24px 18px 28px;
+    overflow: hidden;
+  }
+
+  .section-header {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .chart-tabs {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .chart-tabs button {
+    width: 100%;
+    height: 40px;
+  }
+
+  .ng-chart-container {
+    height: 360px;
+    margin-top: 18px;
+  }
 }
 .products-card {
   padding: 30px 26px 24px;
@@ -674,12 +699,13 @@ td {
 
 .table-wrapper {
   width: 100%;
-  overflow-x: visible;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 table {
   width: 100%;
-  min-width: unset;
+  min-width: 900px;
   table-layout: fixed;
 }
 
@@ -1089,4 +1115,47 @@ td:nth-child(6) {
 .modal-expiring-list .expiring-item strong {
   flex-shrink: 0;
   align-self: center;
+}
+@media (max-width: 480px) {
+  .performance-card {
+    padding: 22px 16px 26px;
+  }
+
+  .section-header h2 {
+    font-size: 26px;
+    line-height: 1.05;
+  }
+
+  .section-header p {
+    font-size: 16px;
+    line-height: 1.35;
+  }
+
+  .chart-tabs {
+    gap: 8px;
+  }
+
+  .ng-chart-container {
+    height: 330px;
+  }
+}
+@media (max-width: 768px) {
+  .products-card {
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    overflow: hidden;
+  }
+
+  .table-wrapper {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .table-wrapper table {
+    min-width: 900px;
+  }
 }

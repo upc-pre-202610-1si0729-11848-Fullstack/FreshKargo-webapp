@@ -1,4 +1,4 @@
-import { Component, ChangeDetectorRef, OnInit } from '@angular/core';
+import { Component, ChangeDetectorRef, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { forkJoin } from 'rxjs';
 
@@ -33,6 +33,7 @@ Chart.register(...registerables);
   styleUrl: './analytics-page.css',
 })
 export class AnalyticsPage implements OnInit {
+  @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
   products: InventoryProduct[] = [];
   shipments: Shipment[] = [];
   warehouses: Warehouse[] = [];
@@ -109,6 +110,9 @@ export class AnalyticsPage implements OnInit {
         this.buildWarehousePerformance();
         this.buildSuppliers();
         this.cdr.detectChanges();
+        setTimeout(() => {
+          this.chart?.update();
+        });
       },
     });
   }
@@ -462,6 +466,9 @@ export class AnalyticsPage implements OnInit {
   setPerformanceChartType(type: 'bar' | 'line'): void {
     this.performanceChartType = type;
     this.buildPerformanceChart();
+    setTimeout(() => {
+      this.chart?.update();
+    });
   }
 
   private getTemperatureValue(temperature: string): number {
