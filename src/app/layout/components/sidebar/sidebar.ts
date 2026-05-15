@@ -14,6 +14,9 @@ import { TranslatePipe } from '../../../shared/i18n/translate.pipe';
 })
 export class Sidebar {
   isCollapsed = false;
+  goToLanding(): void {
+    window.open('https://freshkargo-website.web.app', '_self');
+  }
 
   toggleSidebar() {
     this.isCollapsed = !this.isCollapsed;

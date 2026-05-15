@@ -1,199 +1,199 @@
-<div
-  class="sidebar"
-  [class.sidebar-collapsed]="isCollapsed === true">
+  <div
+    class="sidebar"
+    [class.sidebar-collapsed]="isCollapsed === true">
 
-  <div class="logo-section">
+    <div class="logo-section">
 
-    <div class="logo">
-      <h1 class="logo-text">
-        FreshKargo
-      </h1>
-    </div>
-
-    <button
-      class="toggle-btn"
-      (click)="toggleSidebar()">
-
-      <span class="material-symbols-outlined">
-        {{ isCollapsed ? 'chevron_right' : 'chevron_left' }}
-      </span>
-
-    </button>
-
-  </div>
-
-  <div class="menu">
-
-    <a
-      class="menu-item"
-      routerLink="/"
-      routerLinkActive="active-link"
-      [routerLinkActiveOptions]="{ exact: true }">
-
-      <span class="material-symbols-outlined">
-        dashboard
-        </span>
-
-      <span class="menu-text">
-     {{ 'dashboard' | translate }}
-        </span>
-
-    </a>
-
-    <a
-      class="menu-item"
-      routerLink="/inventory"
-      routerLinkActive="active-link">
-
-      <span class="material-symbols-outlined">
-        inventory_2
-      </span>
-
-      <span class="menu-text">
-       {{ 'inventory' | translate }}
-      </span>
-
-    </a>
-
-    <a
-      class="menu-item"
-      routerLink="/shipments"
-      routerLinkActive="active-link">
-
-      <span class="material-symbols-outlined">
-        local_shipping
-      </span>
-
-      <span class="menu-text">
-      {{ 'shipments' | translate }}
-      </span>
-
-    </a>
-
-    <a
-      class="menu-item"
-      routerLink="/analytics"
-      routerLinkActive="active-link">
-
-     <span class="material-symbols-outlined">
-  analytics
-</span>
-
-      <span class="menu-text">
-       {{ 'analytics' | translate }}
-      </span>
-
-    </a>
-
-    <a class="menu-item">
-
-      <span class="material-symbols-outlined">
-        apartment
-      </span>
-
-      <span class="menu-text">
-      {{ 'suppliers' | translate }}
-      </span>
-
-    </a>
-
-    <a class="menu-item">
-
-      <span class="material-symbols-outlined">
-        notifications
-      </span>
-
-      <span class="menu-text">
-       {{ 'alerts' | translate }}
-      </span>
-
-    </a>
-
-    <a class="menu-item">
-
-      <span class="material-symbols-outlined">
-        group
-      </span>
-
-      <span class="menu-text">
-      {{ 'usersRoles' | translate }}
-      </span>
-
-    </a>
-
-    <a class="menu-item">
-
-      <span class="material-symbols-outlined">
-        hub
-      </span>
-
-      <span class="menu-text">
-       {{ 'integrations' | translate }}
-      </span>
-
-    </a>
-
-  </div>
-
-  <div class="sidebar-spacer"></div>
-
-  <div class="sidebar-bottom">
-
-    <button class="bottom-link">
-
-      <span class="material-symbols-outlined">
-  settings
-</span>
-
-      <span class="bottom-text">
-  {{ 'settings' | translate }}
-</span>
-
-    </button>
-
-    <button class="bottom-link">
-
-     <span class="material-symbols-outlined">
-  help
-</span>
-
-      <span class="bottom-text">
-  {{ 'help' | translate }}
-</span>
-
-    </button>
-
-    <a
-      class="bottom-link"
-      href="https://freshkargo-website.web.app"
-      target="_self">
-
-  <span class="material-symbols-outlined">
-    logout
-  </span>
-
-      <span class="bottom-text">
-    {{ 'backToLanding' | translate }}
-  </span>
-
-    </a>
-
-    <div class="profile-card">
-
-      <div class="profile-avatar">
-        FB
+      <div class="logo">
+        <h1 class="logo-text">
+          FreshKargo
+        </h1>
       </div>
 
-      <div class="profile-info">
+      <button
+        class="toggle-btn"
+        (click)="toggleSidebar()">
 
-        <h4>{{ 'userName' | translate }}</h4>
+        <span class="material-symbols-outlined">
+          {{ isCollapsed ? 'chevron_right' : 'chevron_left' }}
+        </span>
 
-        <p>{{ 'operationsManager' | translate }}</p>
-
-      </div>
+      </button>
 
     </div>
 
-  </div>
+    <div class="menu">
 
-</div>
+      <a
+        class="menu-item"
+        routerLink="/"
+        routerLinkActive="active-link"
+        [routerLinkActiveOptions]="{ exact: true }">
+
+        <span class="material-symbols-outlined">
+          dashboard
+          </span>
+
+        <span class="menu-text">
+       {{ 'dashboard' | translate }}
+          </span>
+
+      </a>
+
+      <a
+        class="menu-item"
+        routerLink="/inventory"
+        routerLinkActive="active-link">
+
+        <span class="material-symbols-outlined">
+          inventory_2
+        </span>
+
+        <span class="menu-text">
+         {{ 'inventory' | translate }}
+        </span>
+
+      </a>
+
+      <a
+        class="menu-item"
+        routerLink="/shipments"
+        routerLinkActive="active-link">
+
+        <span class="material-symbols-outlined">
+          local_shipping
+        </span>
+
+        <span class="menu-text">
+        {{ 'shipments' | translate }}
+        </span>
+
+      </a>
+
+      <a
+        class="menu-item"
+        routerLink="/analytics"
+        routerLinkActive="active-link">
+
+       <span class="material-symbols-outlined">
+    analytics
+  </span>
+
+        <span class="menu-text">
+         {{ 'analytics' | translate }}
+        </span>
+
+      </a>
+
+      <a class="menu-item">
+
+        <span class="material-symbols-outlined">
+          apartment
+        </span>
+
+        <span class="menu-text">
+        {{ 'suppliers' | translate }}
+        </span>
+
+      </a>
+
+      <a class="menu-item">
+
+        <span class="material-symbols-outlined">
+          notifications
+        </span>
+
+        <span class="menu-text">
+         {{ 'alerts' | translate }}
+        </span>
+
+      </a>
+
+      <a class="menu-item">
+
+        <span class="material-symbols-outlined">
+          group
+        </span>
+
+        <span class="menu-text">
+        {{ 'usersRoles' | translate }}
+        </span>
+
+      </a>
+
+      <a class="menu-item">
+
+        <span class="material-symbols-outlined">
+          hub
+        </span>
+
+        <span class="menu-text">
+         {{ 'integrations' | translate }}
+        </span>
+
+      </a>
+
+    </div>
+
+    <div class="sidebar-spacer"></div>
+
+    <div class="sidebar-bottom">
+
+      <button class="bottom-link">
+
+        <span class="material-symbols-outlined">
+    settings
+  </span>
+
+        <span class="bottom-text">
+    {{ 'settings' | translate }}
+  </span>
+
+      </button>
+
+      <button class="bottom-link">
+
+       <span class="material-symbols-outlined">
+    help
+  </span>
+
+        <span class="bottom-text">
+    {{ 'help' | translate }}
+  </span>
+
+      </button>
+
+      <button
+        class="bottom-link"
+        type="button"
+        (click)="goToLanding()">
+
+    <span class="material-symbols-outlined">
+      logout
+    </span>
+
+        <span class="bottom-text">
+      {{ 'backToLanding' | translate }}
+    </span>
+
+      </button>
+
+      <div class="profile-card">
+
+        <div class="profile-avatar">
+          FB
+        </div>
+
+        <div class="profile-info">
+
+          <h4>{{ 'userName' | translate }}</h4>
+
+          <p>{{ 'operationsManager' | translate }}</p>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
