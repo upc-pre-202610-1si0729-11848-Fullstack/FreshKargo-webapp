@@ -230,3 +230,26 @@
     font-size: 14px;
   }
 }
+.menu-text,
+.bottom-text {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.menu-item,
+.bottom-link {
+  min-width: 0;
+}
+
+@media (max-width: 768px) {
+  .sidebar:not(.sidebar-collapsed) {
+    width: 250px;
+    min-width: 250px;
+  }
+
+  .menu-text,
+  .bottom-text {
+    font-size: 14px;
+  }
+}
