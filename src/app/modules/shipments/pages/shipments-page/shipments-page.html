@@ -1,0 +1,473 @@
+<div class="shipments-page">
+
+  <div class="toast" [class.show]="showToast">
+    <span class="material-symbols-outlined">check_circle</span>
+    {{ toastMessage }}
+  </div>
+
+  <div class="page-header">
+    <div class="page-title-section">
+      <h1>Shipments</h1>
+      <p>Track active deliveries, monitor routes, and manage logistics in real-time.</p>
+    </div>
+
+    <div class="shipments-actions-panel">
+      <div class="top-action-row">
+        <button class="outline-btn blue-outline" (click)="openRouteModal()">
+          <span class="material-symbols-outlined">route</span>
+          Create Route
+        </button>
+
+        <button class="outline-btn blue-outline" (click)="openAssignModal()">
+          <span class="material-symbols-outlined">person_add</span>
+          Assign Vehicle
+        </button>
+
+        <button class="primary-btn" (click)="openShipmentModal()">
+          + Create Shipment
+        </button>
+      </div>
+
+      <div class="bottom-action-row">
+        <label class="filter-control">
+          <select [(ngModel)]="selectedStatus">
+            <option>All statuses</option>
+            <option>In Transit</option>
+            <option>Delivered</option>
+            <option>Delayed</option>
+            <option>Loading</option>
+            <option>Rejected</option>
+          </select>
+          <span class="material-symbols-outlined">expand_more</span>
+        </label>
+
+        <label class="filter-control route-filter">
+          <select [(ngModel)]="selectedRoute">
+            <option>All routes</option>
+            <option *ngFor="let route of routeOptions">
+              {{ route }}
+            </option>
+          </select>
+          <span class="material-symbols-outlined">expand_more</span>
+        </label>
+
+        <button
+          class="outline-btn"
+          type="button"
+          (click)="clearFilters()">
+          Clear
+        </button>
+
+        <button
+          class="outline-btn export-btn"
+          type="button"
+          (click)="exportShipments()">
+          <span class="material-symbols-outlined">download</span>
+          Export
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="summary-grid">
+    <div class="summary-card">
+      <div class="summary-top">
+        <h3>Active Shipments</h3>
+        <span class="material-symbols-outlined card-icon blue-icon">local_shipping</span>
+      </div>
+      <h2>{{ activeShipmentsCount }}</h2>
+      <p>{{ inTransitCount }} in transit now</p>
+    </div>
+
+    <div class="summary-card">
+      <div class="summary-top">
+        <h3>Delivered Today</h3>
+        <span class="material-symbols-outlined card-icon green-icon">schedule</span>
+      </div>
+      <h2>{{ deliveredCount }}</h2>
+      <p class="success-text">Completed shipments</p>
+    </div>
+
+    <div class="summary-card">
+      <div class="summary-top">
+        <h3>Delayed Shipments</h3>
+        <span class="material-symbols-outlined card-icon red-icon">warning</span>
+      </div>
+      <h2>{{ delayedCount }}</h2>
+      <p class="danger-text">Requires attention</p>
+    </div>
+
+    <div class="summary-card">
+      <div class="summary-top">
+        <h3>Avg. Transit Temp</h3>
+        <span class="material-symbols-outlined card-icon cyan-icon">device_thermostat</span>
+      </div>
+      <h2>{{ averageTransitTemperature }}</h2>
+      <p class="success-text">Within range</p>
+    </div>
+  </div>
+
+  <div class="content-grid">
+    <div class="panel-card route-panel">
+      <div class="section-header">
+        <div>
+          <h2>Active Routes</h2>
+          <p>Live tracking of shipments in transit</p>
+        </div>
+
+        <div class="tabs">
+          <button class="active">Map View</button>
+          <button>List View</button>
+        </div>
+      </div>
+
+      <div class="route-map">
+        <iframe
+          title="Lima shipment routes map"
+          class="route-map-frame"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          src="https://maps.google.com/maps?q=Lima%2C%20Peru&t=m&z=12&output=embed">
+        </iframe>
+
+        <div class="route-legend">
+          <span><i class="legend-dot blue"></i> In Transit</span>
+          <span><i class="legend-dot green"></i> Delivered</span>
+          <span><i class="legend-dot red"></i> Delayed</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel-card">
+      <div class="section-header">
+        <div>
+          <h2>Delayed Shipments</h2>
+          <p>Shipments behind schedule</p>
+        </div>
+      </div>
+
+      <div class="delay-item" *ngFor="let shipment of delayedShipments">
+        <div>
+          <h4>{{ shipment.id }}</h4>
+          <p>Route: {{ shipment.route }}</p>
+          <small>Driver: {{ shipment.driver }}</small>
+        </div>
+        <strong>Delayed</strong>
+      </div>
+
+      <button class="view-btn">View all delays</button>
+    </div>
+  </div>
+
+  <div class="content-grid small-grid">
+    <div class="panel-card">
+      <div class="performance-header">
+        <div>
+          <h2>On-Time Delivery Performance</h2>
+          <p>{{ deliveredCount }} delivered across {{ shipments.length }} shipments</p>
+        </div>
+
+        <strong>{{ shipments.length ? ((deliveredCount / shipments.length) * 100).toFixed(0) : 0 }}%</strong>
+      </div>
+
+      <div
+        class="performance-route"
+        *ngFor="let performance of performanceRoutes">
+
+        <div class="performance-item">
+          <span>{{ performance.route }}</span>
+          <strong>{{ performance.percent }}%</strong>
+        </div>
+
+        <div class="performance-bar">
+          <div [style.width.%]="performance.percent"></div>
+        </div>
+
+        <div class="performance-meta">
+          <span>{{ performance.delivered }} delivered</span>
+          <span>{{ performance.delayed }} delayed</span>
+          <span>{{ performance.total }} total</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel-card">
+      <h2>Shipment Status Distribution</h2>
+
+      <div class="status-distribution">
+        <div>
+          <span><span class="dot green"></span>Delivered</span>
+          <strong>{{ deliveredCount }}</strong>
+        </div>
+
+        <div>
+          <span><span class="dot blue"></span>In Transit</span>
+          <strong>{{ inTransitCount }}</strong>
+        </div>
+
+        <div>
+          <span><span class="dot orange"></span>Loading</span>
+          <strong>{{ loadingCount }}</strong>
+        </div>
+
+        <div>
+          <span><span class="dot red"></span>Delayed</span>
+          <strong>{{ delayedCount }}</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="table-card">
+    <div class="section-header">
+      <div>
+        <h2>All Shipments</h2>
+      </div>
+      <button class="view-all-link">View all</button>
+    </div>
+
+    <table class="shipments-table">
+      <thead>
+      <tr>
+        <th>Shipment ID</th>
+        <th>Product/Batch</th>
+        <th>Route</th>
+        <th>ETA</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+
+      <tbody>
+      <tr *ngFor="let shipment of filteredShipments">
+        <td class="id-cell">{{ shipment.id }}</td>
+
+        <td>
+          <div class="product-cell">
+            <strong>{{ shipment.product }}</strong>
+            <span>{{ shipment.batch }} / {{ shipment.temperature }}</span>
+          </div>
+        </td>
+
+        <td>
+          <div class="route-cell">
+            <strong>{{ shipment.route }}</strong>
+            <span>Driver: {{ shipment.driver }}</span>
+          </div>
+        </td>
+
+        <td class="eta-cell">{{ shipment.eta }}</td>
+
+        <td>
+          <span
+            class="status-pill"
+            [ngClass]="{
+              'in-transit': shipment.status === 'In Transit',
+              'delivered': shipment.status === 'Delivered',
+              'delayed': shipment.status === 'Delayed',
+              'loading': shipment.status === 'Loading',
+              'rejected': shipment.status === 'Rejected'
+            }">
+            {{ shipment.status }}
+          </span>
+        </td>
+
+        <td>
+          <div class="row-actions">
+            <button
+              *ngIf="shipment.status === 'In Transit'"
+              class="action-btn primary-action"
+              (click)="updateShipmentStatus(shipment, 'Delivered')">
+              Arrive
+            </button>
+
+            <button
+              *ngIf="shipment.status === 'In Transit' || shipment.status === 'Delayed'"
+              class="action-btn danger-outline"
+              (click)="updateShipmentStatus(shipment, 'Rejected')">
+              Reject
+            </button>
+
+            <button
+              *ngIf="shipment.status === 'Delivered'"
+              class="action-btn purple-action">
+              POD
+            </button>
+
+            <button
+              *ngIf="shipment.status === 'Loading'"
+              class="action-btn green-action"
+              (click)="updateShipmentStatus(shipment, 'In Transit')">
+              Depart
+            </button>
+
+            <button
+              *ngIf="shipment.status === 'Rejected'"
+              class="action-btn orange-action"
+              (click)="updateShipmentStatus(shipment, 'Loading')">
+              Return
+            </button>
+
+            <button class="text-action">
+              {{ shipment.status === 'Rejected' ? 'View Incident' : 'Track' }}
+            </button>
+
+            <button class="delete-hidden" (click)="deleteShipment(shipment)">
+              Delete
+            </button>
+          </div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+
+    <div class="empty-state" *ngIf="!filteredShipments.length">
+      No shipments match the selected filters.
+    </div>
+  </div>
+
+  <div class="modal-overlay" *ngIf="activeModal === 'shipment'">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>Create Shipment</h2>
+        <button type="button" (click)="closeModal()">x</button>
+      </div>
+
+      <div class="modal-grid">
+        <div class="form-group">
+          <label>Product</label>
+          <input [(ngModel)]="newShipment.product" placeholder="Fresh Berries">
+        </div>
+
+        <div class="form-group">
+          <label>Batch</label>
+          <input [(ngModel)]="newShipment.batch" placeholder="BT-4529">
+        </div>
+
+        <div class="form-group">
+          <label>Temperature</label>
+          <input [(ngModel)]="newShipment.temperature" placeholder="4C">
+        </div>
+
+        <div class="form-group">
+          <label>Route</label>
+          <input [(ngModel)]="newShipment.route" placeholder="Lima Central -> Surco Market">
+        </div>
+
+        <div class="form-group">
+          <label>Driver</label>
+          <input [(ngModel)]="newShipment.driver" placeholder="Carlos M.">
+        </div>
+
+        <div class="form-group">
+          <label>ETA</label>
+          <input [(ngModel)]="newShipment.eta" placeholder="12:30 PM">
+        </div>
+
+        <div class="form-group">
+          <label>Status</label>
+          <select [(ngModel)]="newShipment.status">
+            <option>In Transit</option>
+            <option>Delivered</option>
+            <option>Delayed</option>
+            <option>Loading</option>
+            <option>Rejected</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button class="cancel-btn" type="button" (click)="closeModal()">Cancel</button>
+        <button class="save-btn" type="button" (click)="createShipment()">Save Shipment</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" *ngIf="activeModal === 'route'">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>Create Route</h2>
+        <button type="button" (click)="closeModal()">x</button>
+      </div>
+
+      <div class="modal-grid">
+        <div class="form-group">
+          <label>Name</label>
+          <input [(ngModel)]="newRoute.name" placeholder="Lima Surco Express">
+        </div>
+
+        <div class="form-group">
+          <label>Type</label>
+          <input [(ngModel)]="newRoute.type" placeholder="Cold chain">
+        </div>
+
+        <div class="form-group">
+          <label>Origin</label>
+          <input [(ngModel)]="newRoute.origin" placeholder="Lima Central">
+        </div>
+
+        <div class="form-group">
+          <label>Destination</label>
+          <input [(ngModel)]="newRoute.destination" placeholder="Surco Market">
+        </div>
+
+        <div class="form-group">
+          <label>Duration</label>
+          <input [(ngModel)]="newRoute.duration" placeholder="45 min">
+        </div>
+
+        <div class="form-group">
+          <label>Distance</label>
+          <input [(ngModel)]="newRoute.distance" placeholder="18 km">
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button class="cancel-btn" type="button" (click)="closeModal()">Cancel</button>
+        <button class="save-btn" type="button" (click)="createRoute()">Save Route</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" *ngIf="activeModal === 'assign'">
+    <div class="modal assign-modal">
+      <div class="modal-header">
+        <h2>Assign Vehicle</h2>
+        <button type="button" (click)="closeModal()">x</button>
+      </div>
+
+      <div class="modal-grid">
+        <div class="form-group">
+          <label>Shipment</label>
+          <select [(ngModel)]="newAssignment.shipmentId">
+            <option value="">Select shipment</option>
+            <option *ngFor="let shipment of shipments" [value]="shipment.id">
+              {{ shipment.id }} - {{ shipment.product }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Vehicle</label>
+          <input [(ngModel)]="newAssignment.vehicle" placeholder="TRK-014">
+        </div>
+
+        <div class="form-group">
+          <label>Driver</label>
+          <input [(ngModel)]="newAssignment.driver" placeholder="Ana R.">
+        </div>
+
+        <div class="form-group">
+          <label>Departure Time</label>
+          <input [(ngModel)]="newAssignment.departureTime" placeholder="10:45 AM">
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button class="cancel-btn" type="button" (click)="closeModal()">Cancel</button>
+        <button class="save-btn" type="button" (click)="assignVehicle()">Assign</button>
+      </div>
+    </div>
+  </div>
+
+</div>

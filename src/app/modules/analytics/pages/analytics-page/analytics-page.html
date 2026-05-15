@@ -1,0 +1,341 @@
+<div class="analytics-page">
+
+  <div class="analytics-header">
+
+    <div>
+      <h1>Analytics</h1>
+
+      <p>
+        Performance metrics, trends, and insights across your entire operation.
+      </p>
+    </div>
+
+    <div class="header-actions">
+
+      <button
+        class="period-btn"
+        [class.active]="activePeriod === 'today'"
+        (click)="setActivePeriod('today')">
+        Today
+      </button>
+
+      <button
+        class="period-btn"
+        [class.active]="activePeriod === 'weekly'"
+        (click)="setActivePeriod('weekly')">
+        Weekly
+      </button>
+
+      <button
+        class="period-btn"
+        [class.active]="activePeriod === 'monthly'"
+        (click)="setActivePeriod('monthly')">
+        Monthly
+      </button>
+
+      <button
+        class="period-btn"
+        [class.active]="activePeriod === 'quarterly'"
+        (click)="setActivePeriod('quarterly')">
+        Quarterly
+      </button>
+
+      <button
+        class="export-btn"
+        (click)="exportAnalytics()">
+
+  <span class="material-symbols-outlined">
+    download
+  </span>
+
+        Export
+      </button>
+
+    </div>
+
+  </div>
+
+  <div class="kpi-grid">
+
+    <div
+      class="kpi-card"
+      *ngFor="let kpi of kpis">
+
+      <div class="kpi-title-row">
+
+        <p>{{ kpi.title }}</p>
+
+        <span class="material-symbols-outlined">
+          {{ kpi.icon }}
+        </span>
+
+      </div>
+
+      <h2>{{ kpi.value }}</h2>
+
+      <small>
+        {{ kpi.change }}
+      </small>
+
+    </div>
+
+  </div>
+
+  <div class="performance-card">
+
+    <div class="section-header">
+
+      <div>
+        <h2>Performance Trends</h2>
+
+        <p>
+          Monthly comparison of key operational metrics
+        </p>
+      </div>
+
+      <div class="chart-tabs">
+        <button
+          [class.active]="performanceChartType === 'bar'"
+          (click)="setPerformanceChartType('bar')">
+          Bar Chart
+        </button>
+
+        <button
+          [class.active]="performanceChartType === 'line'"
+          (click)="setPerformanceChartType('line')">
+          Line Chart
+        </button>
+      </div>
+
+    </div>
+
+    <div class="ng-chart-container">
+
+      <canvas
+        baseChart
+        [data]="performanceChartData"
+        [options]="performanceChartOptions"
+        [type]="performanceChartType">
+      </canvas>
+
+    </div>
+
+  </div>
+
+  <div class="middle-grid">
+
+    <div class="analytics-card">
+
+      <h2>Spoilage Trend</h2>
+
+      <div
+        class="spoilage-item"
+        *ngFor="let item of spoilageTrend">
+
+        <div class="spoilage-row">
+          <span>{{ item.month }}</span>
+          <strong>{{ item.units }}</strong>
+        </div>
+
+        <div class="spoilage-bar">
+          <div
+            class="spoilage-fill"
+            [style.width.%]="item.width">
+          </div>
+        </div>
+
+      </div>
+
+      <div class="success-box">
+        ↓ 28.5% reduction in spoilage this quarter
+      </div>
+
+    </div>
+
+    <div class="analytics-card">
+
+      <h2>Shipments by Category</h2>
+
+      <div
+        class="category-card"
+        *ngFor="let category of shipmentCategories">
+
+        <div
+          class="category-count"
+          [ngClass]="{
+            'dark': category.tone === 'dark',
+            'light': category.tone === 'light',
+            'gray': category.tone === 'gray'
+          }">
+          {{ category.count }}
+        </div>
+
+        <span>{{ category.name }}</span>
+
+        <strong>{{ category.percent }}</strong>
+
+      </div>
+
+    </div>
+
+    <div class="analytics-card">
+
+      <h2>Temperature Compliance</h2>
+
+      <div class="donut-area">
+
+        <div class="donut-chart-container">
+
+          <canvas
+            baseChart
+            [data]="temperatureChartData"
+            [options]="temperatureChartOptions"
+            [type]="temperatureChartType">
+          </canvas>
+
+          <div class="donut-center-text">
+            <h3>97.8%</h3>
+            <p>Compliant</p>
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="temperature-list">
+
+        <div>
+          <span>Within Range</span>
+          <strong class="green-text">
+            {{ withinRangeCount }} shipments
+          </strong>
+        </div>
+
+        <div>
+          <span>Minor Deviation</span>
+          <strong class="orange-text">
+            {{ minorDeviationCount }} shipments
+          </strong>
+        </div>
+
+        <div>
+          <span>Critical Deviation</span>
+          <strong class="red-text">
+            {{ criticalDeviationCount }} shipments
+          </strong>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="bottom-grid">
+
+    <div class="analytics-card">
+
+      <h2>Performance by Warehouse</h2>
+
+      <table class="warehouse-table">
+
+        <thead>
+        <tr>
+          <th>Warehouse</th>
+          <th>On-Time</th>
+          <th>Accuracy</th>
+          <th>Compliance</th>
+          <th>Waste</th>
+        </tr>
+        </thead>
+
+        <tbody>
+
+        <tr
+          *ngFor="let warehouse of warehousePerformance">
+
+          <td>{{ warehouse.warehouse }}</td>
+
+          <td
+            [ngClass]="{
+              'good-text': warehouse.type === 'good',
+              'warning-text': warehouse.type === 'warning',
+              'danger-text': warehouse.type === 'danger'
+            }">
+            {{ warehouse.onTime }}
+          </td>
+
+          <td
+            [ngClass]="{
+              'good-text': warehouse.type === 'good',
+              'warning-text': warehouse.type === 'warning',
+              'danger-text': warehouse.type === 'danger'
+            }">
+            {{ warehouse.accuracy }}
+          </td>
+
+          <td
+            [ngClass]="{
+              'good-text': warehouse.type === 'good',
+              'warning-text': warehouse.type === 'warning',
+              'danger-text': warehouse.type === 'danger'
+            }">
+            {{ warehouse.compliance }}
+          </td>
+
+          <td
+            [ngClass]="{
+              'good-text': warehouse.type === 'good',
+              'warning-text': warehouse.type === 'warning',
+              'danger-text': warehouse.type === 'danger'
+            }">
+            {{ warehouse.waste }}
+          </td>
+
+        </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+    <div class="analytics-card">
+
+      <h2>Supplier Performance</h2>
+
+      <div
+        class="supplier-card"
+        *ngFor="let supplier of suppliers">
+
+        <div class="supplier-top">
+
+          <h4>{{ supplier.name }}</h4>
+
+          <span>
+            ★ {{ supplier.rating }}
+          </span>
+
+        </div>
+
+        <div class="supplier-bottom">
+
+          <p>
+            On-Time:
+            <strong>{{ supplier.onTime }}</strong>
+          </p>
+
+          <p>
+            Quality:
+            <strong>{{ supplier.quality }}</strong>
+          </p>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

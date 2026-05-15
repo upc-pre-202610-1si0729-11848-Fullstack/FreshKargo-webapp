@@ -1,0 +1,532 @@
+<div class="dashboard">
+
+  <div class="dashboard-top">
+
+    <div class="dashboard-title">
+
+      <h1>Control Tower</h1>
+
+      <p>
+        Monitor perishable inventory, active shipments, and operational risks from one centralized dashboard.
+      </p>
+
+      <div class="sub-info">
+        <span>99.8% availability target</span>
+        <span>•</span>
+        <span>Multi-warehouse monitoring</span>
+        <span>•</span>
+        <span>Real-time operational overview</span>
+      </div>
+
+    </div>
+
+    <div class="dashboard-status">
+      <span></span>
+      Last updated: 2 min ago
+    </div>
+
+  </div>
+
+  <div class="dashboard-filters">
+
+    <select
+      class="dashboard-filter-select"
+      [(ngModel)]="selectedDateRange">
+
+      <option>Last 7 days</option>
+      <option>Last 30 days</option>
+      <option>This month</option>
+      <option>This quarter</option>
+
+    </select>
+
+    <select
+      class="dashboard-filter-select"
+      [(ngModel)]="selectedWarehouseFilter"
+      (change)="applyDashboardFilters()">
+
+      <option>All warehouses</option>
+
+      <option
+        *ngFor="let warehouse of warehouses"
+        [value]="warehouse.name">
+        {{ warehouse.name }}
+      </option>
+
+    </select>
+
+    <button (click)="exportDashboardReport()">
+      <span class="material-symbols-outlined">download</span>
+      Export report
+    </button>
+
+  </div>
+
+  <div class="cards-grid">
+
+    <app-stats-card
+      title="Inventory Health"
+      [value]="inventoryHealth"
+      icon="inventory_2"
+    />
+
+    <app-stats-card
+      title="Active Shipments"
+      [value]="activeShipments"
+      icon="local_shipping"
+    />
+
+    <app-stats-card
+      title="Cold Chain Compliance"
+      [value]="coldChainCompliance"
+      icon="ac_unit"
+    />
+
+    <app-stats-card
+      title="Spoilage Risk"
+      [value]="spoilageRiskItems"
+      icon="warning"
+    />
+
+  </div>
+
+  <div class="analytics-grid">
+
+    <div class="operations-card">
+
+      <div class="operations-header">
+
+        <div>
+          <h2>Operations Analytics</h2>
+
+          <p>
+            Shipment performance over the last 6 months
+          </p>
+        </div>
+
+        <div class="chart-tabs">
+
+          <button class="chart-tab active">
+            Daily
+          </button>
+
+          <button class="chart-tab">
+            Weekly
+          </button>
+
+          <button class="chart-tab">
+            Monthly
+          </button>
+
+        </div>
+
+      </div>
+
+      <div class="operations-chart">
+
+        <canvas
+          baseChart
+          [data]="operationsChartData"
+          [options]="operationsChartOptions"
+          [type]="operationsChartType">
+        </canvas>
+
+      </div>
+
+      <div class="operations-footer">
+
+        <div class="chart-legend">
+          <span></span>
+          Shipment Growth
+        </div>
+
+        <strong>
+          +18.2%
+        </strong>
+
+      </div>
+
+    </div>
+
+    <div class="alerts-card">
+
+      <div class="alerts-header">
+        <h2>Operational Alerts</h2>
+        <p>Issues requiring attention</p>
+      </div>
+
+      <div class="alerts-container">
+
+        <div
+          class="alert-box"
+          *ngFor="let alert of operationalAlerts">
+
+          <div>
+            <h4>{{ alert.title }}</h4>
+            <p>{{ alert.description }}</p>
+            <p>{{ alert.detail }}</p>
+          </div>
+
+          <span
+            class="alert-tag"
+            [ngClass]="alert.className">
+      {{ alert.severity }}
+    </span>
+
+        </div>
+
+        <div
+          class="alert-box"
+          *ngIf="operationalAlerts.length === 0">
+
+          <div>
+            <h4>No operational alerts</h4>
+            <p>All inventory and shipments are currently stable.</p>
+            <p>No immediate action required.</p>
+          </div>
+
+          <span class="alert-tag low">
+      Good
+    </span>
+
+        </div>
+
+      </div>
+
+      <button
+        class="view-alerts-btn"
+        (click)="openAlertsModal()">
+        View all alerts
+      </button>
+
+    </div>
+
+  </div>
+
+  <div class="bottom-grid">
+
+    <div class="mini-card category-card">
+
+      <h2>Inventory by Category</h2>
+
+      <ng-container *ngFor="let category of categorySummary">
+
+        <div class="progress-item">
+          <span>{{ category.name }}</span>
+          <span>{{ category.percent }}%</span>
+        </div>
+
+        <div class="progress-bar">
+          <div
+            class="progress-fill"
+            [ngClass]="category.className"
+            [style.width.%]="category.percent">
+          </div>
+        </div>
+
+      </ng-container>
+
+    </div>
+    <div class="mini-card">
+
+      <h2>Warehouse Performance</h2>
+
+      <div
+        class="warehouse-box"
+        *ngFor="let warehouse of warehousePerformance">
+
+        <div>
+          <h4>{{ warehouse.name }}</h4>
+          <p>
+            On-time: {{ warehouse.onTime }}% &nbsp;
+            Avg. temp: {{ warehouse.avgTemp }}
+          </p>
+        </div>
+
+        <span [ngClass]="warehouse.statusClass">
+        {{ warehouse.risk }}
+      </span>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="recent-orders">
+
+    <div class="section-header">
+
+      <h2>Recent Shipments</h2>
+
+      <div class="table-actions">
+
+        <select
+          class="filter-btn"
+          [(ngModel)]="selectedShipmentFilter"
+          (change)="applyShipmentFilter()">
+
+          <option value="All">All Status</option>
+          <option value="In Transit">In Transit</option>
+          <option value="Delivered">Delivered</option>
+          <option value="Delayed">Delayed</option>
+          <option value="Loading">Loading</option>
+
+        </select>
+
+        <button
+          class="view-all-btn"
+          (click)="openShipmentsModal()">
+          View all
+        </button>
+
+      </div>
+
+    </div>
+
+    <table class="shipments-table">
+
+      <thead>
+      <tr>
+        <th>Shipment ID</th>
+        <th>Product</th>
+        <th>Route</th>
+        <th>Temperature</th>
+        <th>ETA</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+      </thead>
+
+      <tbody>
+
+      <tr *ngFor="let shipment of filteredRecentShipments">
+
+        <td>{{ shipment.id }}</td>
+        <td>{{ shipment.product }}</td>
+        <td>{{ shipment.route }}</td>
+        <td>{{ shipment.temperature }}</td>
+        <td>{{ shipment.eta }}</td>
+
+        <td>
+          <span
+            [ngClass]="{
+              'status-blue': shipment.status === 'In Transit',
+              'status-green': shipment.status === 'Delivered',
+              'status-red': shipment.status === 'Delayed',
+              'status-yellow': shipment.status === 'Loading'
+            }">
+            {{ shipment.status }}
+          </span>
+        </td>
+
+        <td
+          class="view-link"
+          (click)="openShipmentDetail(shipment)">
+          View
+        </td>
+
+      </tr>
+
+      </tbody>
+
+    </table>
+
+  </div>
+  <div
+    class="modal-overlay"
+    *ngIf="isShipmentsModalOpen">
+
+    <div class="modal details-modal dashboard-modal">
+
+      <div class="modal-header">
+
+        <div>
+          <h2>All Recent Shipments</h2>
+          <p>Real-time shipment monitoring overview.</p>
+        </div>
+
+        <button (click)="closeShipmentsModal()">
+          ✕
+        </button>
+
+      </div>
+
+      <div class="dashboard-shipments-list">
+
+        <div
+          class="shipment-modal-card"
+          *ngFor="let shipment of shipments">
+
+          <div class="shipment-modal-info">
+
+            <h3>{{ shipment.product }}</h3>
+
+            <span>
+            {{ shipment.route }}
+          </span>
+
+            <span>
+            ETA: {{ shipment.eta }}
+          </span>
+
+            <span>
+            Temperature: {{ shipment.temperature }}
+          </span>
+
+          </div>
+
+          <span
+            class="shipment-status"
+            [ngClass]="{
+            'status-blue': shipment.status === 'In Transit',
+            'status-green': shipment.status === 'Delivered',
+            'status-red': shipment.status === 'Delayed',
+            'status-yellow': shipment.status === 'Loading'
+          }">
+
+          {{ shipment.status }}
+
+        </span>
+
+        </div>
+
+      </div>
+
+      <div class="modal-footer">
+
+        <button
+          class="view-all-btn"
+          (click)="closeShipmentsModal()">
+
+          Close
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+  <div
+    class="modal-overlay"
+    *ngIf="isShipmentDetailModalOpen && selectedShipment">
+
+    <div class="dashboard-modal">
+
+      <div class="modal-header">
+        <div>
+          <h2>{{ selectedShipment.product }}</h2>
+          <p>{{ selectedShipment.id }} • {{ selectedShipment.status }}</p>
+        </div>
+
+        <button (click)="closeShipmentDetail()">
+          ✕
+        </button>
+      </div>
+
+      <div class="dashboard-shipments-list">
+
+        <div class="shipment-modal-card">
+          <div class="shipment-modal-info">
+            <h3>Route</h3>
+            <span>{{ selectedShipment.route }}</span>
+          </div>
+        </div>
+
+        <div class="shipment-modal-card">
+          <div class="shipment-modal-info">
+            <h3>Temperature</h3>
+            <span>{{ selectedShipment.temperature }}</span>
+          </div>
+        </div>
+
+        <div class="shipment-modal-card">
+          <div class="shipment-modal-info">
+            <h3>ETA</h3>
+            <span>{{ selectedShipment.eta }}</span>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="modal-footer">
+        <button
+          class="view-all-btn"
+          (click)="closeShipmentDetail()">
+          Close
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+  <div
+    class="modal-overlay"
+    *ngIf="isAlertsModalOpen">
+
+    <div class="dashboard-modal">
+
+      <div class="modal-header">
+        <div>
+          <h2>All Operational Alerts</h2>
+          <p>Inventory and shipment issues requiring attention.</p>
+        </div>
+
+        <button (click)="closeAlertsModal()">
+          ✕
+        </button>
+      </div>
+
+      <div class="dashboard-shipments-list">
+
+        <div
+          class="alert-box"
+          *ngFor="let alert of operationalAlerts">
+
+          <div>
+            <h4>{{ alert.title }}</h4>
+            <p>{{ alert.description }}</p>
+            <p>{{ alert.detail }}</p>
+          </div>
+
+          <span
+            class="alert-tag"
+            [ngClass]="alert.className">
+          {{ alert.severity }}
+        </span>
+
+        </div>
+
+        <div
+          class="alert-box"
+          *ngIf="operationalAlerts.length === 0">
+
+          <div>
+            <h4>No operational alerts</h4>
+            <p>All inventory and shipments are currently stable.</p>
+            <p>No immediate action required.</p>
+          </div>
+
+          <span class="alert-tag low">
+          Good
+        </span>
+
+        </div>
+
+      </div>
+
+      <div class="modal-footer">
+        <button
+          class="view-all-btn"
+          (click)="closeAlertsModal()">
+          Close
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+  </div>
+
+

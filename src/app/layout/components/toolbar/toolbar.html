@@ -1,0 +1,59 @@
+<div class="toolbar">
+
+  <div class="search-box">
+
+    <span class="material-symbols-outlined">
+      search
+    </span>
+
+    <input
+      type="text"
+      [placeholder]="'searchPlaceholder' | translate"
+    />
+
+  </div>
+
+  <div class="toolbar-actions">
+
+    <button class="new-btn">
+      {{ 'newShipment' | translate }}
+    </button>
+
+    <button class="icon-btn notification-btn">
+
+      <span class="material-symbols-outlined">
+        notifications
+      </span>
+
+      <span class="notification-badge">
+        3
+      </span>
+
+    </button>
+
+    <button
+      class="icon-btn language-btn"
+      (click)="toggleLanguage()">
+
+      <span class="material-symbols-outlined">
+        language
+      </span>
+
+    </button>
+
+    <div class="profile">
+
+      <div class="avatar">
+        U
+      </div>
+
+      <div>
+        <h4>{{ 'userName' | translate }}</h4>
+        <p>{{ 'userRole' | translate }}</p>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
